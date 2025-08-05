@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rolaí - Criador de Personagens</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a472a">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a472a 50%, #2d5016 100%);
+            color: #e8f4e6;
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(15, 20, 25, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 2px solid #2d5016;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #1a472a, #2d5016);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #4a7c59;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: #a8d5ba;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            color: #c8e6c9;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tabs {
+            display: flex;
+            background: #0f1419;
+            border-bottom: 2px solid #2d5016;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 10px;
+            background: #1a472a;
+            color: #a8d5ba;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border-right: 1px solid #2d5016;
+        }
+
+        .tab:last-child {
+            border-right: none;
+        }
+
+        .tab.active {
+            background: #2d5016;
+            color: #e8f4e6;
+            box-shadow: inset 0 3px 0 #4a7c59;
+        }
+
+        .tab:hover {
+            background: #255220;
+        }
+
+        .content {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #a8d5ba;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(26, 71, 42, 0.3);
+            border: 2px solid #2d5016;
+            border-radius: 8px;
+            color: #e8f4e6;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #4a7c59;
+            box-shadow: 0 0 10px rgba(74, 124, 89, 0.3);
+        }
+
+        .attributes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .attribute-item {
+            background: rgba(26, 71, 42, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #2d5016;
+            text-align: center;
+        }
+
+        .attribute-item label {
+            display: block;
+            margin-bottom: 5px;
+            color: #a8d5ba;
+            font-size: 0.85rem;
+        }
+
+        .attribute-item input {
+            width: 80px;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .attribute-item .half-value {
+            font-size: 0.8rem;
+            color: #c8e6c9;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(26, 71, 42, 0.2);
+            border-radius: 6px;
+            border: 1px solid #2d5016;
+        }
+
+        .skill-item label {
+            flex: 1;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .skill-item input {
+            width: 60px;
+            text-align: center;
+            margin: 0;
+            padding: 5px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #2d5016, #4a7c59);
+            color: #e8f4e6;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #4a7c59, #6b9b78);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .occupation-descriptions {
+            background: rgba(26, 71, 42, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px solid #2d5016;
+        }
+
+        .occupation-descriptions h3 {
+            color: #a8d5ba;
+            margin-bottom: 10px;
+        }
+
+        .character-sheet {
+            background: rgba(15, 20, 25, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #2d5016;
+            margin-top: 20px;
+        }
+
+        .character-sheet h3 {
+            color: #a8d5ba;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        .sheet-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(26, 71, 42, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #4a7c59;
+        }
+
+        .sheet-section h4 {
+            color: #a8d5ba;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .horror-theme-note {
+            background: rgba(139, 69, 19, 0.2);
+            border: 1px solid #8b4513;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-style: italic;
+            color: #deb887;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 5px;
+                border-radius: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .tab {
+                font-size: 0.8rem;
+                padding: 12px 8px;
+            }
+            
+            .content {
+                padding: 15px;
+                max-height: 60vh;
+            }
+            
+            .attributes-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar customization */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f1419;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2d5016;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a7c59;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌲 Rolaí - Criador de Personagens</h1>
+            <p>Ecos da Terra Queimada • Call of Cthulhu 2053</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showSection('info')">Info Básica</button>
+            <button class="tab" onclick="showSection('attributes')">Atributos</button>
+            <button class="tab" onclick="showSection('skills')">Perícias</button>
+            <button class="tab" onclick="showSection('sheet')">Ficha</button>
+        </div>
+
+        <div class="content">
+            <!-- Seção de Informações Básicas -->
+            <div id="info" class="section active">
+                <div class="form-group">
+                    <label for="name">Nome do Personagem</label>
+                    <input type="text" id="name" placeholder="Nome do seu sobrevivente">
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Idade</label>
+                    <input type="number" id="age" min="15" max="80" value="25">
+                </div>
+
+                <div class="form-group">
+                    <label for="occupation">Profissão Pré-Guerra</label>
+                    <select id="occupation" onchange="updateOccupationInfo()">
+                        <option value="">Selecione uma profissão</option>
+                        <option value="biologo">Biólogo/Pesquisador</option>
+                        <option value="militar">Ex-Militar/Soldado</option>
+                        <option value="tecnico">Técnico/Engenheiro</option>
+                        <option value="medico">Médico/Paramédico</option>
+                        <option value="sobrevivente">Sobrevivente Local</option>
+                        <option value="guia">Guia/Rastreador</option>
+                        <option value="comunicador">Operador de Rádio</option>
+                        <option value="refugiado">Refugiado Urbano</option>
+                    </select>
+                </div>
+
+                <div class="occupation-descriptions" id="occupationInfo">
+                    <h3>Contexto das Profissões em 2053</h3>
+                    <p>Selecione uma profissão para ver detalhes sobre como ela se encaixa no mundo pós-apocalíptico de Rolaí.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="backstory">História Pessoal</label>
+                    <textarea id="backstory" rows="4" placeholder="Como seu personagem sobreviveu à guerra? O que o trouxe ao Itatiaia? Que traumas carrega?"></textarea>
+                </div>
+
+                <div class="horror-theme-note">
+                    <strong>⚠ Nota Importante:</strong> Este é um cenário de horror cósmico ambientado em um mundo pós-apocalíptico. Seu personagem já presenciou horrores da guerra, mas nada o preparou para o que pode estar se escondendo na floresta regenerada do Itatiaia...
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn" onclick="rollAttributes()">🎲 Rolar Atributos</button>
+                    <button class="btn" onclick="generateRandomName()">📝 Nome Aleatório</button>
+                </div>
+            </div>
+
+            <!-- Seção de Atributos -->
+            <div id="attributes" class="section">
+                <h3>Atributos Primários</h3>
+                <div class="attributes-grid" id="attributesGrid">
+                    <!-- Atributos serão gerados dinamicamente -->
+                </div>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <label for="hitpoints">Pontos de Vida</label>
+                    <input type="number" id="hitpoints" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="sanity">Sanidade</label>
+                    <input type="number" id="sanity" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="luck">Sorte</label>
+                    <input type="number" id="luck">
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn" onclick="rollAttributes()">🎲 Rolar Todos</button>
+                    <button class="btn" onclick="calculateDerivedStats()">📊 Calcular Status</button>
+                </div>
+            </div>
+
+            <!-- Seção de Perícias -->
+            <div id="skills" class="section">
+                <h3>Perícias Relevantes para a Aventura</h3>
+                <div class="skills-grid" id="skillsGrid">
+                    <!-- Perícias serão geradas dinamicamente -->
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn" onclick="distributeOccupationSkills()">🎯 Distribuir Pontos da Profissão</button>
+                    <button class="btn" onclick="distributePersonalSkills()">👤 Distribuir Pontos Pessoais</button>
+                </div>
+            </div>
+
+            <!-- Seção da Ficha Final -->
+            <div id="sheet" class="section">
+                <div class="character-sheet" id="characterSheet">
+                    <!-- Ficha será gerada dinamicamente -->
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn" onclick="exportCharacter()">💾 Exportar Personagem</button>
+                    <button class="btn" onclick="printCharacter()">🖨 Imprimir Ficha</button>
+                    <button class="btn" onclick="resetCharacter()">🔄 Novo Personagem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados do personagem
+        let character = {
+            name: '',
+            age: 25,
+            occupation: '',
+            backstory: '',
+            attributes: {},
+            skills: {},
+            hitpoints: 0,
+            sanity: 0,
+            luck: 0
+        };
+
+        // Atributos base do Call of Cthulhu
+        const attributes = [
+            { name: 'STR', label: 'Força', min: 15, max: 90 },
+            { name: 'CON', label: 'Constituição', min: 15, max: 90 },
+            { name: 'SIZ', label: 'Tamanho', min: 40, max: 90 },
+            { name: 'DEX', label: 'Destreza', min: 15, max: 90 },
+            { name: 'APP', label: 'Aparência', min: 15, max: 90 },
+            { name: 'INT', label: 'Inteligência', min: 40, max: 90 },
+            { name: 'POW', label: 'Poder', min: 15, max: 90 },
+            { name: 'EDU', label: 'Educação', min: 40, max: 90 }
+        ];
+
+        // Perícias relevantes para a aventura
+        const skills = [
+            { name: 'Antropologia', base: 1 },
+            { name: 'Biologia', base: 1 },
+            { name: 'Rastreamento', base: 10 },
+            { name: 'Sobrevivência', base: 10 },
+            { name: 'Primeiros Socorros', base: 30 },
+            { name: 'Furtividade', base: 10 },
+            { name: 'Escutar', base: 25 },
+            { name: 'Observar', base: 25 },
+            { name: 'Usar Equipamento Científico', base: 1 },
+            { name: 'Navegação', base: 10 },
+            { name: 'Montanhismo', base: 5 },
+            { name: 'Natação', base: 25 },
+            { name: 'Armas de Fogo (Rifles)', base: 25 },
+            { name: 'Armas de Fogo (Pistolas)', base: 20 },
+            { name: 'Briga', base: 25 },
+            { name: 'Esquivar', base: 0 }, // DEX/2
+            { name: 'Linguagem (Português)', base: 0 }, // EDU
+            { name: 'Psicologia', base: 5 },
+            { name: 'Ocultismo', base: 5 },
+            { name: 'Mitologia', base: 5 },
+            { name: 'Medicina', base: 5 },
+            { name: 'Farmácia', base: 1 },
+            { name: 'Eletrônica', base: 1 },
+            { name: 'Operar Rádio', base: 5 },
+            { name: 'Dirigir Auto', base: 20 },
+            { name: 'Pilotar', base: 1 }
+        ];
+
+        // Informações das profissões
+        const occupationInfo = {
+            biologo: {
+                title: "Biólogo/Pesquisador",
+                description: "Você era um cientista antes da guerra, talvez trabalhando em universidades ou institutos de pesquisa. Agora, seu conhecimento é crucial para manter as Zonas de Regeneração vivas. Você entende os ecossistemas e pode identificar quando algo não está natural.",
+                skills: ['Biologia', 'Usar Equipamento Científico', 'Observar', 'Sobrevivência', 'Primeiros Socorros', 'Farmácia', 'Eletrônica', 'Língua Estrangeira'],
+                points: 240
+            },
+            militar: {
+                title: "Ex-Militar/Soldado",
+                description: "Você serviu durante a Terceira Guerra Mundial, viu o mundo queimar e de alguma forma sobreviveu. Suas habilidades de combate e disciplina são valiosas, mas as memórias da guerra assombram seus sonhos.",
+                skills: ['Armas de Fogo (Rifles)', 'Armas de Fogo (Pistolas)', 'Briga', 'Sobrevivência', 'Primeiros Socorros', 'Furtividade', 'Rastreamento', 'Dirigir Auto'],
+                points: 240
+            },
+            tecnico: {
+                title: "Técnico/Engenheiro",
+                description: "Especialista em manter equipamentos funcionando em um mundo onde peças de reposição são raras. Você mantém geradores, sistemas de comunicação e equipamentos científicos operacionais nas zonas de regeneração.",
+                skills: ['Eletrônica', 'Usar Equipamento Científico', 'Operar Rádio', 'Dirigir Auto', 'Primeiros Socorros', 'Observar', 'Navegação', 'Sobrevivência'],
+                points: 240
+            },
+            medico: {
+                title: "Médico/Paramédico",
+                description: "Você salvou vidas durante e após a guerra. Em um mundo sem hospitais funcionais, cada conhecimento médico é precioso. Você conhece os efeitos da radiação e trauma, mas também sabe reconhecer ferimentos... não convencionais.",
+                skills: ['Medicina', 'Primeiros Socorros', 'Farmácia', 'Biologia', 'Psicologia', 'Observar', 'Sobrevivência', 'Dirigir Auto'],
+                points: 240
+            },
+            sobrevivente: {
+                title: "Sobrevivente Local",
+                description: "Você sempre viveu próximo ao Itatiaia e conhece cada trilha, cada nascente, cada som da floresta. Quando o mundo acabou, você já sabia como viver da terra. Mas ultimamente, a floresta não soa como antes...",
+                skills: ['Sobrevivência', 'Rastreamento', 'Montanhismo', 'Navegação', 'Escutar', 'Observar', 'Natação', 'Furtividade'],
+                points: 240
+            },
+            guia: {
+                title: "Guia/Rastreador",
+                description: "Profissional em levar pessoas pela natureza selvagem, você conhece sinais, pegadas e comportamentos animais. Sua experiência é vital para navegar pelo território perigoso e identificar ameaças naturais... ou não naturais.",
+                skills: ['Rastreamento', 'Sobrevivência', 'Montanhismo', 'Navegação', 'Observar', 'Escutar', 'Primeiros Socorros', 'Furtividade'],
+                points: 240
+            },
+            comunicador: {
+                title: "Operador de Rádio",
+                description: "Você mantém a rede de comunicação entre as zonas de regeneração funcionando. Conhece códigos, frequências e protocolos. Às vezes, você capta transmissões estranhas que não deveriam existir...",
+                skills: ['Operar Rádio', 'Eletrônica', 'Escutar', 'Observar', 'Língua Estrangeira', 'Sobrevivência', 'Navegação', 'Primeiros Socorros'],
+                points: 240
+            },
+            refugiado: {
+                title: "Refugiado Urbano",
+                description: "Você veio das ruínas das grandes cidades, fugindo da radiação e do caos. Não conhece a natureza como os locais, mas aprendeu a se adaptar rapidamente e a encontrar recursos onde outros não conseguem.",
+                skills: ['Sobrevivência', 'Furtividade', 'Observar', 'Escutar', 'Briga', 'Primeiros Socorros', 'Psicologia', 'Dirigir Auto'],
+                points: 240
+            }
+        };
+
+        // Nomes brasileiros para geração aleatória
+        const randomNames = [
+            'Ana Silva', 'Carlos Santos', 'Maria Oliveira', 'João Ferreira', 'Lucia Costa',
+            'Roberto Lima', 'Patricia Souza', 'Marcos Pereira', 'Sandra Almeida', 'Paulo Ribeiro',
+            'Fernanda Gomes', 'Ricardo Martins', 'Juliana Rocha', 'Gustavo Carvalho', 'Adriana Dias',
+            'Felipe Nascimento', 'Camila Barbosa', 'Thiago Moreira', 'Vanessa Campos', 'Bruno Aragão',
+            'Isabela Teixeira', 'Leonardo Reis', 'Gabriela Cardoso', 'Rodrigo Fernandes', 'Leticia Monteiro'
+        ];
+
+        // Inicializar aplicação
+        function init() {
+            createAttributesGrid();
+            createSkillsGrid();
+            rollAttributes();
+            calculateDerivedStats();
+        }
+
+        // Alternar seções
+        function showSection(sectionName) {
+            // Remover classe active de todas as seções e tabs
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            
+            // Ativar seção e tab selecionados
+            document.getElementById(sectionName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Atualizar ficha se necessário
+            if (sectionName === 'sheet') {
+                updateCharacterSheet();
+            }
+        }
+
+        // Criar grid de atributos
+        function createAttributesGrid() {
+            const grid = document.getElementById('attributesGrid');
+            grid.innerHTML = '';
+
+            attributes.forEach(attr => {
+                const div = document.createElement('div');
+                div.className = 'attribute-item';
+                div.innerHTML = `
+                    <label>${attr.label} (${attr.name})</label>
+                    <input type="number" id="${attr.name.toLowerCase()}" min="${attr.min}" max="${attr.max}" 
+                           onchange="updateAttribute('${attr.name}')" onkeyup="updateAttribute('${attr.name}')">
+                    <div class="half-value" id="${attr.name.toLowerCase()}_half">×½ = 0</div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        // Criar grid de perícias
+        function createSkillsGrid() {
+            const grid = document.getElementById('skillsGrid');
+            grid.innerHTML = '';
+
+            skills.forEach(skill => {
+                const div = document.createElement('div');
+                div.className = 'skill-item';
+                div.innerHTML = `
+                    <label>${skill.name}</label>
+                    <input type="number" id="skill_${skill.name.replace(/\s+/g, '_').replace(/[()]/g, '').toLowerCase()}" 
+                           min="0" max="99" value="${skill.base}" onchange="updateSkill('${skill.name}')">
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        // Rolar dados (3d6 x 5 para a maioria dos atributos)
+        function rollDice(dice, sides, multiplier = 1) {
+            let total = 0;
+            for (let i = 0; i < dice; i++) {
+                total += Math.floor(Math.random() * sides) + 1;
+            }
+            return total * multiplier;
+        }
+
+        // Rolar todos os atributos
+        function rollAttributes() {
+            attributes.forEach(attr => {
+                let value;
+                if (attr.name === 'STR' || attr.name === 'CON' || attr.name === 'DEX' || attr.name === 'APP' || attr.name === 'POW') {
+                    value = rollDice(3, 6, 5); // 3d6 x 5
+                } else if (attr.name === 'SIZ') {
+                    value = rollDice(2, 6, 5) + 30; // 2d6+6 x 5
+                } else if (attr.name === 'INT' || attr.name === 'EDU') {
+                    value = rollDice(2, 6, 5) + 30; // 2d6+6 x 5
+                }
+
+                // Garantir que está dentro dos limites
+                value = Math.max(attr.min, Math.min(attr.max, value));
+                
+                document.getElementById(attr.name.toLowerCase()).value = value;
+                character.attributes[attr.name] = value;
+                updateAttributeHalf(attr.name, value);
+            });
+
+            calculateDerivedStats();
+        }
+
+        // Atualizar valor meio do atributo
+        function updateAttributeHalf(attrName, value) {
+            const halfElement = document.getElementById(attrName.toLowerCase() + '_half');
+            if (halfElement) {
+                halfElement.textContent = '×½ = ' + Math.floor(value / 2);
+            }
+        }
+
+        // Atualizar atributo individual
+        function updateAttribute(attrName) {
+            const value = parseInt(document.getElementById(attrName.toLowerCase()).value) || 0;
+            character.attributes[attrName] = value;
+            updateAttributeHalf(attrName, value);
+            calculateDerivedStats();
+        }
+
+        // Calcular estatísticas derivadas
+        function calculateDerivedStats() {
+            const str = character.attributes.STR || 0;
+            const con = character.attributes.CON || 0;
+            const siz = character.attributes.SIZ || 0;
+            const pow = character.attributes.POW || 0;
+            const dex = character.attributes.DEX || 0;
+            const edu = character.attributes.EDU || 0;
+
+            // Pontos de Vida = (CON + SIZ) / 10
+            const hp = Math.floor((con + siz) / 10);
+            character.hitpoints = hp;
+            document.getElementById('hitpoints').value = hp;
+
+            // Sanidade = POW
+            character.sanity = pow;
+            document.getElementById('sanity').value = pow;
+
+            // Sorte = 3d6 x 5 (se não definida)
+            if (!character.luck || character.luck === 0) {
+                character.luck = rollDice(3, 6, 5);
+                document.getElementById('luck').value = character.luck;
+            }
+
+            // Atualizar perícias baseadas em atributos
+            updateAttributeBasedSkills();
+        }
+
+        // Atualizar perícias baseadas em atributos
+        function updateAttributeBasedSkills() {
+            const dex = character.attributes.DEX || 0;
+            const edu = character.attributes.EDU || 0;
+
+            // Esquivar = DEX / 2
+            const dodgeInput = document.getElementById('skill_esquivar');
+            if (dodgeInput) {
+                dodgeInput.value = Math.floor(dex / 2);
+            }
+
+            // Linguagem (Português) = EDU
+            const languageInput = document.getElementById('skill_linguagem_portugues');
+            if (languageInput) {
+                languageInput.value = edu;
+            }
+        }
+
+        // Atualizar informações da profissão
+        function updateOccupationInfo() {
+            const occupation = document.getElementById('occupation').value;
+            const infoDiv = document.getElementById('occupationInfo');
+            
+            if (occupation && occupationInfo[occupation]) {
+                const info = occupationInfo[occupation];
+                infoDiv.innerHTML = `
+                    <h3>${info.title}</h3>
+                    <p style="margin-bottom: 15px;">${info.description}</p>
+                    <p><strong>Perícias Profissionais:</strong> ${info.skills.join(', ')}</p>
+                    <p><strong>Pontos para Distribuir:</strong> ${info.points}</p>
+                `;
+            } else {
+                infoDiv.innerHTML = `
+                    <h3>Contexto das Profissões em 2053</h3>
+                    <p>Selecione uma profissão para ver detalhes sobre como ela se encaixa no mundo pós-apocalíptico de Rolaí.</p>
+                `;
+            }
+            
+            character.occupation = occupation;
+        }
+
+        // Gerar nome aleatório
+        function generateRandomName() {
+            const randomName = randomNames[Math.floor(Math.random() * randomNames.length)];
+            document.getElementById('name').value = randomName;
+            character.name = randomName;
+        }
+
+        // Atualizar perícia
+        function updateSkill(skillName) {
+            const skillId = 'skill_' + skillName.replace(/\s+/g, '_').replace(/[()]/g, '').toLowerCase();
+            const value = parseInt(document.getElementById(skillId).value) || 0;
+            character.skills[skillName] = value;
+        }
+
+        // Distribuir pontos da profissão
+        function distributeOccupationSkills() {
+            const occupation = character.occupation;
+            if (!occupation || !occupationInfo[occupation]) {
+                alert('Selecione uma profissão primeiro!');
+                return;
+            }
+
+            const info = occupationInfo[occupation];
+            const pointsPerSkill = Math.floor(info.points / info.skills.length);
+            const remainingPoints = info.points % info.skills.length;
+
+            info.skills.forEach((skillName, index) => {
+                const skillId = 'skill_' + skillName.replace(/\s+/g, '_').replace(/[()]/g, '').toLowerCase();
+                const skillInput = document.getElementById(skillId);
+                
+                if (skillInput) {
+                    let points = pointsPerSkill;
+                    if (index < remainingPoints) points += 1;
+                    
+                    const currentBase = parseInt(skillInput.value) || 0;
+                    skillInput.value = currentBase + points;
+                    updateSkill(skillName);
+                }
+            });
+
+            alert('Pontos da profissão distribuídos! ' + info.points + ' pontos aplicados às perícias profissionais.');
+        }
+
+        // Distribuir pontos pessoais
+        function distributePersonalSkills() {
+            const int = character.attributes.INT || 50;
+            const personalPoints = int * 2;
+
+            alert('Você tem ' + personalPoints + ' pontos pessoais para distribuir entre suas perícias de interesse. Distribua manualmente conforme sua história pessoal.');
+        }
+
+        // Coletar dados do formulário
+        function collectCharacterData() {
+            character.name = document.getElementById('name').value;
+            character.age = parseInt(document.getElementById('age').value) || 25;
+            character.occupation = document.getElementById('occupation').value;
+            character.backstory = document.getElementById('backstory').value;
+            character.luck = parseInt(document.getElementById('luck').value) || 0;
+
+            // Coletar atributos
+            attributes.forEach(attr => {
+                const value = parseInt(document.getElementById(attr.name.toLowerCase()).value) || 0;
+                character.attributes[attr.name] = value;
+            });
+
+            // Coletar perícias
+            skills.forEach(skill => {
+                const skillId = 'skill_' + skill.name.replace(/\s+/g, '_').replace(/[()]/g, '').toLowerCase();
+                const value = parseInt(document.getElementById(skillId).value) || skill.base;
+                character.skills[skill.name] = value;
+            });
+        }
+
+        // Atualizar ficha do personagem
+        function updateCharacterSheet() {
+            collectCharacterData();
+
+            const sheet = document.getElementById('characterSheet');
+            const occupationTitle = character.occupation && occupationInfo[character.occupation] 
+                ? occupationInfo[character.occupation].title 
+                : 'Não definida';
+
+            sheet.innerHTML = `
+                <h3>📋 ${character.name || 'Personagem Sem Nome'}</h3>
+                
+                <div class="sheet-section">
+                    <h4>🧬 Informações Básicas</h4>
+                    <p><strong>Nome:</strong> ${character.name || 'Não definido'}</p>
+                    <p><strong>Idade:</strong> ${character.age} anos</p>
+                    <p><strong>Profissão Pré-Guerra:</strong> ${occupationTitle}</p>
+                    <p><strong>História:</strong> ${character.backstory || 'Não definida'}</p>
+                </div>
+
+                <div class="sheet-section">
+                    <h4>💪 Atributos</h4>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                        ${attributes.map(attr => `
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>${attr.label} (${attr.name}):</span>
+                                <span><strong>${character.attributes[attr.name] || 0}</strong> (${Math.floor((character.attributes[attr.name] || 0) / 2)})</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="sheet-section">
+                    <h4>❤ Status</h4>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.2em; font-weight: bold; color: #ff6b6b;">${character.hitpoints}</div>
+                            <div style="font-size: 0.8em;">Pontos de Vida</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.2em; font-weight: bold; color: #4ecdc4;">${character.sanity}</div>
+                            <div style="font-size: 0.8em;">Sanidade</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.2em; font-weight: bold; color: #45b7d1;">${character.luck}</div>
+                            <div style="font-size: 0.8em;">Sorte</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sheet-section">
+                    <h4>🎯 Perícias Principais</h4>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; font-size: 0.9em;">
+                        ${skills.filter(skill => character.skills[skill.name] > skill.base + 10)
+                               .map(skill => `
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>${skill.name}:</span>
+                                <span><strong>${character.skills[skill.name] || skill.base}%</strong></span>
+                            </div>
+                        `).join('') || '<p style="text-align: center; color: #888;">Nenhuma perícia desenvolvida ainda</p>'}
+                    </div>
+                </div>
+
+                <div class="sheet-section">
+                    <h4>🌲 Contexto da Aventura</h4>
+                    <p style="font-size: 0.9em; line-height: 1.4;">
+                        <strong>Local:</strong> Parque Nacional do Itatiaia, região do Pico das Agulhas Negras<br>
+                        <strong>Ano:</strong> 2053 (27 anos após a Terceira Guerra Mundial)<br>
+                        <strong>Situação:</strong> Capivaras desaparecendo misteriosamente. Pegadas estranhas encontradas.<br>
+                        <strong>Missão:</strong> Investigar os desaparecimentos e proteger a Zona de Regeneração.
+                    </p>
+                </div>
+            `;
+        }
+
+        // Exportar personagem como JSON
+        function exportCharacter() {
+            collectCharacterData();
+            
+            const dataStr = JSON.stringify(character, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = (character.name || 'personagem') + '_rolaí.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Imprimir ficha
+        function printCharacter() {
+            updateCharacterSheet();
+            
+            const printWindow = window.open('', '_blank');
+            const sheet = document.getElementById('characterSheet').innerHTML;
+            
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Ficha - ${character.name || 'Personagem'}</title>
+                    <style>
+                        body { font-family: Georgia, serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+                        .sheet-section { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; }
+                        h3, h4 { color: #2d5016; }
+                        @media print { body { padding: 0; } }
+                    </style>
+                </head>
+                <body>
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h1>Rolaí - Ecos da Terra Queimada</h1>
+                        <h2>Call of Cthulhu 2053</h2>
+                    </div>
+                    ${sheet}
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Resetar personagem
+        function resetCharacter() {
+            if (confirm('Tem certeza que deseja criar um novo personagem? Todos os dados atuais serão perdidos.')) {
+                character = {
+                    name: '',
+                    age: 25,
+                    occupation: '',
+                    backstory: '',
+                    attributes: {},
+                    skills: {},
+                    hitpoints: 0,
+                    sanity: 0,
+                    luck: 0
+                };
+
+                // Limpar formulários
+                document.getElementById('name').value = '';
+                document.getElementById('age').value = 25;
+                document.getElementById('occupation').value = '';
+                document.getElementById('backstory').value = '';
+
+                // Reroller atributos e recalcular
+                rollAttributes();
+                
+                // Resetar perícias para valores base
+                skills.forEach(skill => {
+                    const skillId = 'skill_' + skill.name.replace(/\s+/g, '_').replace(/[()]/g, '').toLowerCase();
+                    const skillInput = document.getElementById(skillId);
+                    if (skillInput) {
+                        skillInput.value = skill.base;
+                    }
+                });
+
+                updateOccupationInfo();
+                updateCharacterSheet();
+                
+                // Voltar para primeira aba
+                showSection('info');
+                document.querySelector('.tab').click();
+            }
+        }
+
+        // Event listeners para atualizar dados em tempo real
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+
+            // Listeners para campos básicos
+            document.getElementById('name').addEventListener('input', function() {
+                character.name = this.value;
+            });
+
+            document.getElementById('age').addEventListener('input', function() {
+                character.age = parseInt(this.value) || 25;
+            });
+
+            document.getElementById('backstory').addEventListener('input', function() {
+                character.backstory = this.value;
+            });
+
+            document.getElementById('luck').addEventListener('input', function() {
+                character.luck = parseInt(this.value) || 0;
+            });
+        });
+
+        // Service Worker para PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(console.error);
+        }
+    </script>
+</body>
+</html>

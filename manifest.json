@@ -1,0 +1,24 @@
+{
+  "name": "Rolaí - Criador de Personagens Call of Cthulhu",
+  "short_name": "Rolaí",
+  "description": "Criador de personagens para Call of Cthulhu - Ecos da Terra Queimada",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1419",
+  "theme_color": "#1a472a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9IiMxYTQ3MmEiLz4KPHN2ZyB4PSI0OCIgeT0iNDgiIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNhOGQ1YmEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj4KPHA+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMyIvPjwvcD4KPHA+PHBhdGggZD0ibTEyIDEtMS41IDNMMTUgOGwtMy0yLjVaIi8+PC9wPgo8cD48cGF0aCBkPSJtMTIgMjMgMS41LTNMOSAxNmwzIDIuNVoiLz48L3A+CjxwPjxwYXRoIGQ9Ik0yMCAxMmwtMyAxLjUtNS0zIDIuNS0zWiIvPjwvcD4KPHA+PHBhdGggZD0iTTQgMTJsMy0xLjUgNSAzTDkuNSAxNloiLz48L3A+CjxwPjxwYXRoIGQ9Im0xOS4wNyA0LjkzLTIuMTIgMi4xMkwxMyA5bDIuOTMtMi45M1oiLz48L3A+CjxwPjxwYXRoIGQ9Im00LjkzIDE5LjA3IDIuMTItMi4xMkwxMSAxNWwtMi45MyAyLjkzWiIvPjwvcD4KPHA+PHBhdGggZD0ibTE5LjA3IDE5LjA3LTIuMTItMi4xMkwxNSAxMWwyLjkzIDIuOTNaIi8+PC9wPgo8cD48cGF0aCBkPSJtNC45MyA0LjkzIDIuMTIgMi4xMkw5IDlsLTIuOTMtMi45M1oiLz48L3A+Cjwvc3ZnPgo8dGV4dCB4PSI5NiIgeT0iMTY4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYThkNWJhIiBmb250LWZhbWlseT0ic2VyaWYiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIj5Sb2xhw608L3RleHQ+Cjwvc3ZnPg==",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iNjQiIGZpbGw9IiMxYTQ3MmEiLz4KPHN2ZyB4PSIxMjgiIHk9IjEyOCIgd2lkdGg9IjI1NiIgaGVpZ2h0PSIyNTYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYThkNWJhIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj4KPHA+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMyIvPjwvcD4KPHA+PHBhdGggZD0ibTEyIDEtMS41IDNMMTUgOGwtMy0yLjVaIi8+PC9wPgo8cD48cGF0aCBkPSJtMTIgMjMgMS41LTNMOSAxNmwzIDIuNVoiLz48L3A+CjxwPjxwYXRoIGQ9Ik0yMCAxMmwtMyAxLjUtNS0zIDIuNS0zWiIvPjwvcD4KPHA+PHBhdGggZD0iTTQgMTJsMy0xLjUgNSAzTDkuNSAxNloiLz48L3A+CjxwPjxwYXRoIGQ9Im0xOS4wNyA0LjkzLTIuMTIgMi4xMkwxMyA5bDIuOTMtMi45M1oiLz48L3A+CjxwPjxwYXRoIGQ9Im00LjkzIDE5LjA3IDIuMTItMi4xMkwxMSAxNWwtMi45MyAyLjkzWiIvPjwvcD4KPHA+PHBhdGggZD0ibTE5LjA3IDE5LjA3LTIuMTItMi4xMkwxNSAxMWwyLjkzIDIuOTNaIi8+PC9wPgo8cD48cGF0aCBkPSJtNC45MyA0LjkzIDIuMTIgMi4xMkw5IDlsLTIuOTMtMi45M1oiLz48L3A+Cjwvc3ZnPgo8dGV4dCB4PSIyNTYiIHk9IjQ0OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2E4ZDViYSIgZm9udC1mYW1pbHk9InNlcmlmIiBmb250LXNpemU9IjQ4IiBmb250LXdlaWdodD0iYm9sZCI+Um9sYcOtPC90ZXh0Pgo8L3N2Zz4=",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["games", "entertainment", "productivity"],
+  "lang": "pt-BR"
+}
