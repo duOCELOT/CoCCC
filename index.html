@@ -539,6 +539,95 @@
             .attribute-generation {
                 flex-direction: column;
             }
+            .image-upload-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(79, 195, 161, 0.1);
+    border-radius: 8px;
+    border: 1px dashed rgba(79, 195, 161, 0.3);
+}
+
+.image-preview {
+    width: 150px;
+    height: 150px;
+    margin: 15px auto;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #4fc3a1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.image-preview .placeholder {
+    color: #888;
+    text-align: center;
+    padding: 20px;
+}
+
+.upload-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: rgba(79, 195, 161, 0.2);
+    border: 1px solid #4fc3a1;
+    color: #4fc3a1;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-btn:hover {
+    background: rgba(79, 195, 161, 0.3);
+}
+
+#imageInput {
+    display: none;
+}
+
+.sheet-header {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.sheet-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #4fc3a1;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.sheet-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sheet-image .no-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 3em;
+}
+
+.sheet-info {
+    flex: 1;
+}
         }
     </style>
 </head>
@@ -569,7 +658,20 @@
                 <div class="form-group">
                     <label for="characterName">Nome do Investigador:</label>
                     <input type="text" id="characterName" placeholder="Ex: Marcus 'Sucata' Silva">
-                </div>
+                </div><div class="image-upload-section">
+    <label>Foto do Investigador:</label>
+    <div class="image-preview" id="imagePreview">
+        <div class="placeholder">
+            📷<br>
+            Clique para adicionar<br>
+            uma foto
+        </div>
+    </div>
+    <input type="file" id="imageInput" accept="image/*" onchange="handleImageUpload(event)">
+    <button class="upload-btn" onclick="document.getElementById('imageInput').click()">
+        Escolher Imagem
+    </button>
+</div>
 
                 <div class="form-group">
                     <label for="characterAge">Idade:</label>
@@ -814,9 +916,14 @@
                 <h2>📜 Ficha do Investigador</h2>
                 
                 <div class="sheet-section">
-                    <h3>👤 Identificação</h3>
-                    <div id="sheetBasicInfo"></div>
-                </div>
+    <h3>👤 Identificação</h3>
+    <div class="sheet-header">
+        <div class="sheet-image" id="sheetImage">
+            <div class="no-image">👤</div>
+        </div>
+        <div class="sheet-info" id="sheetBasicInfo"></div>
+    </div>
+</div>
                 
                 <div class="sheet-section">
                     <h3>📊 Atributos</h3>
@@ -1029,7 +1136,8 @@
             occupationalSkills: {},
             personalSkills: {},
             rollHistory: [],
-            heroicRolls: []
+            heroicRolls: [],
+            image: null
         };
 
         // Inicialização
@@ -1375,11 +1483,12 @@
             skills[skillName] = newValue;
             updateSkillsDisplay();
         }
-
-        function updateCharacterSheet() {
-            const basicInfo = document.getElementById('sheetBasicInfo');
-            const attributes = document.getElementById('sheetAttributes');
-            const skills = document.getElementById('sheetSkills');
+function updateCharacterSheet() {
+    updateCharacterImage(); // ← ADICIONE ESTA LINHA NO INÍCIO
+    
+    const basicInfo = document.getElementById('sheetBasicInfo');
+    const attributes = document.getElementById('sheetAttributes');
+    const skills = document.getElementById('sheetSkills');
             
             // Atualiza dados
             characterData.name = document.getElementById('characterName').value || "Investigador Sem Nome";
@@ -1498,12 +1607,11 @@
             
             updateDerivedStats();
         }
-
-        function exportCharacter() {
-            updateCharacterSheet();
-            
-            // Prepara dados das perícias com valores finais
-            const finalSkills = {};
+function exportCharacter() {
+    updateCharacterSheet();
+    
+    // Prepara dados das perícias com valores finais
+    const finalSkills = {};
             
             // Atualiza valores base dinâmicos
             baseSkillValues["Esquivar"] = Math.floor(characterData.attributes.dex / 2);
@@ -1530,12 +1638,13 @@
                 }
             });
             
-            const exportData = {
-                sistema: "Call of Cthulhu - 7ª Edição",
-                cenario: "Rolai 2053 - Ecos da Terra Queimada",
-                personagem: {
-                    nome: characterData.name,
-                    idade: characterData.age,
+    const exportData = {
+        sistema: "Call of Cthulhu - 7ª Edição",
+        cenario: "Rolai 2053 - Ecos da Terra Queimada",
+        imagem: characterData.image,  // ← ADICIONE ESTA LINHA
+        personagem: {
+            nome: characterData.name,
+            idade: characterData.age,
                     ocupacao: characterData.occupation === 'custom' 
                         ? characterData.customOccupation.name 
                         : (occupations[characterData.occupation]?.name || "Indefinida"),
@@ -1617,6 +1726,47 @@
         function resetCharacter() {
             if (confirm('⚠️ Tem certeza que deseja resetar todo o personagem?\n\nEsta ação não pode ser desfeita!')) {
                 location.reload();
+            }
+        }
+        function resetCharacter() {
+            if (confirm('⚠️ Tem certeza que deseja resetar todo o personagem?\n\nEsta ação não pode ser desfeita!')) {
+                characterData.image = null;  // ← ADICIONE ESTA LINHA
+                location.reload();
+            }
+        }
+
+        // ← ADICIONE AS NOVAS FUNÇÕES AQUI, DEPOIS DO resetCharacter:
+
+        // Função para lidar com upload de imagem
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    characterData.image = e.target.result;
+                    
+                    // Atualiza preview na aba de info
+                    const preview = document.getElementById('imagePreview');
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Foto do Investigador">`;
+                    
+                    // Atualiza na ficha se estiver visível
+                    updateCharacterImage();
+                };
+                
+                reader.readAsDataURL(file);
+            } else {
+                alert('Por favor, selecione um arquivo de imagem válido.');
+            }
+        }
+
+        // Função para atualizar imagem na ficha
+        function updateCharacterImage() {
+            const sheetImage = document.getElementById('sheetImage');
+            if (characterData.image) {
+                sheetImage.innerHTML = `<img src="${characterData.image}" alt="${characterData.name || 'Investigador'}">`;
+            } else {
+                sheetImage.innerHTML = '<div class="no-image">👤</div>';
             }
         }
     </script>
