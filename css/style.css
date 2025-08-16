@@ -24,18 +24,16 @@ body {
 
 /* Header */
 .header {
-    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('images/banner.png');
-    background-size: cover;
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('../images/banner.png');
+    background-size: cover; /* Fills container, may crop edges but no distortion */
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed; /* Parallax effect */
     padding: 40px;
     text-align: center;
     position: relative;
     overflow: hidden;
-    min-height: 250px;
+    height: 200px; /* Set a specific height */
 }
-
 .header::before {
     content: '';
     position: absolute;
@@ -1203,4 +1201,13 @@ textarea:focus {
     .characteristic-group {
         background: rgba(255, 255, 255, 0.03);
     }
+}
+
+/* Hide ComfyUI tab from public */
+.tab-button[onclick*="comfyui"] {
+    display: none !important;
+}
+
+#comfyui {
+    display: none !important;
 }
