@@ -3,674 +3,825 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rolai - Criador de Personagens Aprimorado</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Rolai - Call of Cthulhu 2053</title>
+    <style>
+        /* GLOBAL STYLES */
+        :root {
+            --primary-color: #8B4513;
+            --primary-light: #CD853F;
+            --primary-dark: #5D2F04;
+            --secondary-color: #DEB887;
+            --accent-color: #228B22;
+            --warning-color: #DAA520;
+            --danger-color: #B22222;
+            --bg-dark: #1a1a1a;
+            --bg-medium: #2d2d2d;
+            --bg-light: #f8f5f0;
+            --bg-paper: #fefefe;
+            --text-dark: #2c2c2c;
+            --text-medium: #555555;
+            --text-light: #f8f5f0;
+            --text-muted: #888888;
+            --font-primary: 'Georgia', 'Times New Roman', serif;
+            --font-secondary: 'Arial', 'Helvetica', sans-serif;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 0.75rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --spacing-3xl: 4rem;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --max-width-7xl: 80rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-primary);
+            font-weight: normal;
+            line-height: 1.2;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-dark);
+        }
+
+        h1 { font-size: 2.25rem; font-weight: bold; }
+        h2 { font-size: 1.875rem; color: var(--primary-color); }
+        h3 { font-size: 1.5rem; color: var(--primary-color); }
+        h4 { font-size: 1.25rem; color: var(--primary-dark); }
+
+        p {
+            margin-bottom: var(--spacing-md);
+            text-align: justify;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        a:hover {
+            color: var(--primary-light);
+        }
+
+        /* MAIN CONTAINER */
+        .main-container {
+            max-width: var(--max-width-7xl);
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--bg-light);
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .main-header {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--primary-dark) 100%);
+            color: var(--text-light);
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 255, 0.03) 2px,
+                rgba(255, 255, 255, 0.03) 4px
+            );
+            pointer-events: none;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            position: relative;
+            z-index: 1;
+        }
+
+        .radiation-symbol {
+            font-size: 2rem;
+            color: var(--warning-color);
+            animation: pulse 2s infinite;
+            text-shadow: 0 0 10px rgba(218, 165, 32, 0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .header-text h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+            color: var(--text-light);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .header-text .subtitle {
+            font-size: 1.25rem;
+            margin: var(--spacing-xs) 0;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+
+        .header-text .year {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .header-description {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-description p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin: 0;
+            text-align: center;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            background: var(--bg-light);
+        }
+
+        .intro-section {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.05) 0%, rgba(205, 133, 63, 0.05) 100%);
+        }
+
+        .world-context {
+            max-width: 56rem;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .world-context h2 {
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-lg);
+            font-size: 1.875rem;
+        }
+
+        .world-context p {
+            font-size: 1.125rem;
+            color: var(--text-medium);
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        /* NAVIGATION */
+        .main-navigation {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: var(--bg-light);
+        }
+
+        .nav-card {
+            background: var(--bg-paper);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-normal);
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+            transition: left var(--transition-normal);
+        }
+
+        .nav-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+
+        .nav-card:hover::before {
+            left: 0;
+        }
+
+        .nav-card[data-category="rules"] {
+            border-left: 4px solid #4682B4;
+        }
+
+        .nav-card[data-category="tools"] {
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .nav-card[data-category="adventure"] {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .nav-card[data-category="resources"] {
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .nav-icon {
+            font-size: 1.875rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .nav-badge {
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-badge.new {
+            background: var(--accent-color);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-3px); }
+            60% { transform: translateY(-2px); }
+        }
+
+        .nav-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .nav-card p {
+            color: var(--text-medium);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .nav-features {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .feature {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-action {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.125rem;
+            text-align: center;
+            padding: var(--spacing-sm) 0;
+            border-top: 1px solid #eee;
+            transition: color var(--transition-fast);
+        }
+
+        .nav-card:hover .nav-action {
+            color: var(--primary-light);
+        }
+
+        /* QUICK START */
+        .quick-start {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: var(--bg-paper);
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .quick-start h2 {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+            color: var(--primary-color);
+        }
+
+        .quick-steps {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--spacing-lg);
+            max-width: 64rem;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            background: var(--bg-light);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
+            box-shadow: var(--shadow-sm);
+            transition: transform var(--transition-normal);
+        }
+
+        .step:hover {
+            transform: translateY(-2px);
+        }
+
+        .step-number {
+            background: var(--primary-color);
+            color: var(--text-light);
+            width: 40px;
+            height: 40px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-md);
+            font-weight: bold;
+            font-size: 1.125rem;
+        }
+
+        .step h4 {
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .step p {
+            color: var(--text-medium);
+            font-size: 0.875rem;
+            margin: 0 0 var(--spacing-md) 0;
+            text-align: center;
+        }
+
+        .step-link {
+            display: inline-block;
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+        }
+
+        .step-link:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .step-arrow {
+            font-size: 1.5rem;
+            color: var(--primary-light);
+            font-weight: bold;
+        }
+
+        /* WORLD INFO */
+        .world-info {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: var(--bg-light);
+        }
+
+        .world-info h2 {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+            color: var(--primary-color);
+        }
+
+        .world-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            max-width: 72rem;
+            margin: 0 auto;
+        }
+
+        .world-card {
+            background: var(--bg-paper);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-normal);
+            border: 1px solid transparent;
+        }
+
+        .world-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-light);
+        }
+
+        .world-icon {
+            font-size: 1.875rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .world-card h4 {
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .world-card p {
+            color: var(--text-medium);
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin: 0;
+            text-align: center;
+        }
+
+        /* FOOTER */
+        .main-footer {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-lg);
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-lg);
+            max-width: 72rem;
+            margin: 0 auto var(--spacing-lg);
+        }
+
+        .footer-section h4 {
+            color: var(--primary-light);
+            margin-bottom: var(--spacing-sm);
+            font-size: 1.125rem;
+        }
+
+        .footer-section p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin: var(--spacing-xs) 0;
+            text-align: left;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin: 0;
+            text-align: center;
+        }
+
+        /* SCROLL INDICATOR */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+            z-index: 1000;
+            width: 0%;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .main-navigation {
+                grid-template-columns: 1fr;
+                padding: var(--spacing-lg);
+                gap: var(--spacing-md);
+            }
+            
+            .nav-card {
+                padding: var(--spacing-lg);
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: var(--spacing-md);
+            }
+            
+            .radiation-symbol {
+                font-size: 1.5rem;
+            }
+            
+            .quick-steps {
+                flex-direction: column;
+                gap: var(--spacing-md);
+            }
+            
+            .step-arrow {
+                transform: rotate(90deg);
+            }
+            
+            .world-cards {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header {
+                padding: var(--spacing-xl) var(--spacing-md);
+            }
+            
+            .intro-section,
+            .quick-start,
+            .world-info {
+                padding: var(--spacing-xl) var(--spacing-md);
+            }
+            
+            .step {
+                padding: var(--spacing-md);
+            }
+            
+            .nav-card {
+                padding: var(--spacing-md);
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1><span class="radiation-symbol">☢</span> Rolai - Criador de Personagens <span class="radiation-symbol">☢</span></h1>
-            <div class="subtitle">Ecos da Terra Queimada • Call of Cthulhu 2053 • Sistema Físico Detalhado</div>
-        </div>
-
-        <div class="tabs">
-            <button class="tab-button active" onclick="showTab('info')">🧬 Info Detalhada</button>
-            <button class="tab-button" onclick="showTab('attributes')">💪 Atributos</button>
-            <button class="tab-button" onclick="showTab('skills')">🎯 Perícias</button>
-            <button class="tab-button" onclick="showTab('sheet')">📄 Ficha Final</button>
-        </div>
-
-        <div id="info" class="tab-content active">
-            <div class="info-box">
-                <h3>🌿 Bem-vindo a Itatiaia, 2053</h3>
-                <p>A Terceira Guerra Mundial varreu as grandes cidades do mundo. Mas aqui, nas montanhas entre Rio e São Paulo, a vida continua, de certa forma. Itatiaia e outras pequenas cidades remotas sobreviveram - longe demais dos alvos estratégicos, protegidas pela geografia, esquecidas pela guerra. Nos últimos anos, reconstruímos uma vida quase normal. Temos eletricidade da velha hidrelétrica, cultivamos nossa comida, e até restabelecemos contato com outros bolsões de sobreviventes. Para nossos filhos, este é o único mundo que conhecem - seguro, pequeno, mas nosso. Só que ultimamente, exploradores têm encontrado coisas estranhas nas ruínas das metrópoles mortas. E alguns juram que a destruição despertou algo que deveria ter permanecido adormecido.</p>
+    <div class="scroll-indicator"></div>
+    
+    <div class="main-container">
+        <header class="main-header">
+            <div class="header-content">
+                <div class="radiation-symbol">☢</div>
+                <div class="header-text">
+                    <h1>Rolai</h1>
+                    <p class="subtitle">Ecos da Terra Queimada</p>
+                    <p class="year">Call of Cthulhu • 2053</p>
+                </div>
+                <div class="radiation-symbol">☢</div>
             </div>
+            <div class="header-description">
+                <p>Sistema completo para investigadores no mundo pós-apocalíptico</p>
+            </div>
+        </header>
 
-            <!-- Basic Character Info -->
-            <div class="section">
-                <h2>🎭 Informações Básicas do Investigador</h2>
-                
-                <div class="form-group">
-                    <label for="characterName">Nome do Investigador:</label>
-                    <input type="text" id="characterName" placeholder="Ex: Dr. Marcus 'Sucata' Silva" onchange="updateCharacterData()">
-                </div>
-
-                <div class="form-group">
-                    <label for="characterAge">Idade:</label>
-                    <input type="number" id="characterAge" min="15" max="90" placeholder="15-90 anos" onchange="updateCharacterData()">
-                </div>
-
-                <div class="form-group">
-                    <label for="occupationSelect">Ocupação no Mundo Devastado:</label>
-                    <select id="occupationSelect" onchange="updateOccupationInfo()">
-                        <option value="">Selecione uma ocupação...</option>
-                        <option value="scavenger">Sucateiro - Encontra tesouros nos escombros</option>
-                        <option value="mechanic">Mecânico - Mantém máquinas funcionando</option>
-                        <option value="medic">Médico de Campo - Cura sem recursos</option>
-                        <option value="trader">Comerciante - Negocia entre assentamentos</option>
-                        <option value="guard">Guarda - Protege os fracos</option>
-                        <option value="scout">Explorador - Desbrava o desconhecido</option>
-                        <option value="cultist">Cultista - Conhece segredos proibidos</option>
-                        <option value="mutant_hunter">Caçador de Mutantes - Elimina aberrações</option>
-                        <option value="scholar">Acadêmico - Preserva o conhecimento antigo</option>
-                        <option value="custom">✏️ Criar Ocupação Personalizada</option>
-                    </select>
-                </div>
-
-                <div id="occupationInfo"></div>
-
-                <div class="custom-occupation" id="customOccupationGroup">
-                    <div class="form-group">
-                        <label for="customOccupationName">Nome da Ocupação:</label>
-                        <input type="text" id="customOccupationName" placeholder="Ex: Xamã Tecnológico" onchange="updateCharacterData()">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="customOccupationDesc">Descrição:</label>
-                        <textarea id="customOccupationDesc" placeholder="Descreva o papel desta ocupação no mundo devastado..." onchange="updateCharacterData()"></textarea>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="characterBackground">História de Sobrevivência:</label>
-                    <textarea id="characterBackground" placeholder="Como você sobreviveu à guerra? O que perdeu? O que ainda busca neste mundo morto? Quais são suas motivações e objetivos?" onchange="updateCharacterData()"></textarea>
+        <main class="main-content">
+            <div class="intro-section">
+                <div class="world-context">
+                    <h2>🌍 Bem-vindo ao Mundo de 2053</h2>
+                    <p>A Terceira Guerra Mundial varreu as grandes cidades do planeta. Nas montanhas remotas do Brasil, pequenas comunidades lutam para reconstruir a civilização. Mas nem tudo que sobreviveu à devastação deveria ter sobrevivido...</p>
                 </div>
             </div>
 
-            <!-- Enhanced Physical Characteristics -->
-            <div class="physical-characteristics">
-                <h2>🧬 Características Físicas Detalhadas</h2>
+            <nav class="main-navigation">
+                <div class="nav-card" data-target="guide.html" data-category="rules">
+                    <div class="nav-header">
+                        <div class="nav-icon">📖</div>
+                        <span class="nav-badge new">Novo</span>
+                    </div>
+                    <h3>Guia do Investigador</h3>
+                    <p>Aprenda as regras do Call of Cthulhu adaptadas para o mundo pós-apocalíptico de 2053</p>
+                    <div class="nav-features">
+                        <span class="feature">• Regras simplificadas</span>
+                        <span class="feature">• Exemplos práticos</span>
+                        <span class="feature">• Sistema de Sanidade</span>
+                        <span class="feature">• Dicas para novatos</span>
+                    </div>
+                    <div class="nav-action">Começar a Ler →</div>
+                </div>
                 
-                <div class="characteristics-grid">
-                    <!-- Basic Demographics -->
-                    <div class="characteristic-group">
-                        <h3>👤 Demografia Básica</h3>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="characterGender">Gênero:</label>
-                                <select id="characterGender" onchange="updatePhysical('gender', this.value)">
-                                    <option value="person">Neutro/Pessoa</option>
-                                    <option value="female">Feminino</option>
-                                    <option value="male">Masculino</option>
-                                    <option value="non-binary">Não-binário</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="characterEthnicity">Etnia:</label>
-                                <select id="characterEthnicity" onchange="updatePhysical('ethnicity', this.value)">
-                                    <option value="mixed">Mista</option>
-                                    <option value="latino">Latino</option>
-                                    <option value="caucasian">Caucasiana</option>
-                                    <option value="african">Africana</option>
-                                    <option value="asian">Asiática</option>
-                                    <option value="indigenous">Indígena</option>
-                                    <option value="other">Outra</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="characterSkinTone">Tom de Pele:</label>
-                                <select id="characterSkinTone" onchange="updatePhysical('skinTone', this.value)">
-                                    <option value="medium">Médio</option>
-                                    <option value="light">Claro</option>
-                                    <option value="tan">Bronzeado</option>
-                                    <option value="dark">Escuro</option>
-                                    <option value="very_light">Muito Claro</option>
-                                    <option value="very_dark">Muito Escuro</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="characterEyeColor">Cor dos Olhos:</label>
-                                <select id="characterEyeColor" onchange="updatePhysical('eyeColor', this.value)">
-                                    <option value="brown">Castanho</option>
-                                    <option value="blue">Azul</option>
-                                    <option value="green">Verde</option>
-                                    <option value="hazel">Avelã</option>
-                                    <option value="amber">Âmbar</option>
-                                    <option value="gray">Cinza</option>
-                                    <option value="heterochromia">Heterocromia</option>
-                                </select>
-                            </div>
-                        </div>
+                <div class="nav-card" data-target="generator.html" data-category="tools">
+                    <div class="nav-header">
+                        <div class="nav-icon">🎲</div>
+                        <span class="nav-badge">Essencial</span>
                     </div>
-
-                    <!-- Facial Features -->
-                    <div class="characteristic-group">
-                        <h3>👁️ Características Faciais</h3>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="characterHairColor">Cor do Cabelo:</label>
-                                <select id="characterHairColor" onchange="updatePhysical('hairColor', this.value)">
-                                    <option value="dark_brown">Castanho Escuro</option>
-                                    <option value="black">Preto</option>
-                                    <option value="brown">Castanho</option>
-                                    <option value="light_brown">Castanho Claro</option>
-                                    <option value="blonde">Loiro</option>
-                                    <option value="red">Ruivo</option>
-                                    <option value="gray">Grisalho</option>
-                                    <option value="white">Branco</option>
-                                    <option value="dyed">Colorido</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="characterHairStyle">Estilo do Cabelo:</label>
-                                <select id="characterHairStyle" onchange="updatePhysical('hairStyle', this.value)">
-                                    <option value="short">Curto</option>
-                                    <option value="medium">Médio</option>
-                                    <option value="long">Longo</option>
-                                    <option value="bald">Careca</option>
-                                    <option value="buzzcut">Raspado</option>
-                                    <option value="ponytail">Rabo de Cavalo</option>
-                                    <option value="braided">Trançado</option>
-                                    <option value="messy">Bagunçado</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="facialExpression">Expressão:</label>
-                                <select id="facialExpression" onchange="updatePhysical('facialExpression', this.value)">
-                                    <option value="determined">Determinada</option>
-                                    <option value="calm">Calma</option>
-                                    <option value="alert">Alerta</option>
-                                    <option value="worried">Preocupada</option>
-                                    <option value="confident">Confiante</option>
-                                    <option value="suspicious">Desconfiada</option>
-                                    <option value="tired">Cansada</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="characterPosture">Postura:</label>
-                                <select id="characterPosture" onchange="updatePhysical('posture', this.value)">
-                                    <option value="confident">Confiante</option>
-                                    <option value="alert">Alerta</option>
-                                    <option value="relaxed">Relaxada</option>
-                                    <option value="nervous">Nervosa</option>
-                                    <option value="aggressive">Agressiva</option>
-                                    <option value="cautious">Cautelosa</option>
-                                </select>
-                            </div>
-                        </div>
+                    <h3>Gerador de Personagens</h3>
+                    <p>Crie seu investigador com sistema detalhado de características físicas e ocupações pós-guerra</p>
+                    <div class="nav-features">
+                        <span class="feature">• Sistema de atributos</span>
+                        <span class="feature">• Ocupações especializadas</span>
+                        <span class="feature">• Características físicas</span>
+                        <span class="feature">• Ficha exportável</span>
                     </div>
-
-                    <!-- Body Characteristics -->
-                    <div class="characteristic-group">
-                        <h3>🏃‍♂️ Físico e Estatura</h3>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="bodyType">Tipo Corporal:</label>
-                                <select id="bodyType" onchange="updatePhysical('bodyType', this.value)">
-                                    <option value="average">Médio</option>
-                                    <option value="thin">Magro</option>
-                                    <option value="lean">Esbelto</option>
-                                    <option value="athletic">Atlético</option>
-                                    <option value="stocky">Robusto</option>
-                                    <option value="heavy">Pesado</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="characterHeight">Altura:</label>
-                                <select id="characterHeight" onchange="updatePhysical('height', this.value)">
-                                    <option value="average">Média</option>
-                                    <option value="short">Baixo</option>
-                                    <option value="tall">Alto</option>
-                                    <option value="very_short">Muito Baixo</option>
-                                    <option value="very_tall">Muito Alto</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="clothingStyle">Estilo de Roupa:</label>
-                            <select id="clothingStyle" onchange="updatePhysical('clothingStyle', this.value)">
-                                <option value="practical">Prática</option>
-                                <option value="military">Militar</option>
-                                <option value="scavenged">Recuperada</option>
-                                <option value="well_maintained">Bem Cuidada</option>
-                                <option value="ragged">Esfarrapada</option>
-                                <option value="formal">Formal</option>
-                            </select>
-                        </div>
+                    <div class="nav-action">Criar Personagem →</div>
+                </div>
+                
+                <div class="nav-card" data-target="scenario.html" data-category="adventure">
+                    <div class="nav-header">
+                        <div class="nav-icon">🏔️</div>
+                        <span class="nav-badge">Aventura</span>
                     </div>
+                    <h3>Pico das Agulhas Negras</h3>
+                    <p>Cenário completo para sua primeira investigação nas montanhas do Rio de Janeiro</p>
+                    <div class="nav-features">
+                        <span class="feature">• Mistério investigativo</span>
+                        <span class="feature">• NPCs detalhados</span>
+                        <span class="feature">• Mapas e pistas</span>
+                        <span class="feature">• Para 3-6 jogadores</span>
+                    </div>
+                    <div class="nav-action">Explorar Cenário →</div>
                 </div>
 
-                <!-- Prosthetics and Augmentations -->
-                <div class="modification-section">
-                    <h4>🦾 Próteses e Augmentações</h4>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>
-                                <input type="checkbox" id="prosthetics-enabled" onchange="toggleProsthetics(this.checked)">
-                                Possui Próteses
-                            </label>
-                            
-                            <div id="prosthetics-options" style="display: none; margin-top: 10px;">
-                                <label>Membros Protéticos:</label>
-                                <div class="checkbox-grid">
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="prosthetic-left-arm" onchange="updateProstheticLimb('left_arm', this.checked)">
-                                        <label for="prosthetic-left-arm">Braço Esquerdo</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="prosthetic-right-arm" onchange="updateProstheticLimb('right_arm', this.checked)">
-                                        <label for="prosthetic-right-arm">Braço Direito</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="prosthetic-left-leg" onchange="updateProstheticLimb('left_leg', this.checked)">
-                                        <label for="prosthetic-left-leg">Perna Esquerda</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="prosthetic-right-leg" onchange="updateProstheticLimb('right_leg', this.checked)">
-                                        <label for="prosthetic-right-leg">Perna Direita</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="prosthetic-left-hand" onchange="updateProstheticLimb('left_hand', this.checked)">
-                                        <label for="prosthetic-left-hand">Mão Esquerda</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="prosthetic-right-hand" onchange="updateProstheticLimb('right_hand', this.checked)">
-                                        <label for="prosthetic-right-hand">Mão Direita</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-row" style="margin-top: 10px;">
-                                    <div class="form-group">
-                                        <label for="prosthetic-type">Tipo:</label>
-                                        <select id="prosthetic-type" onchange="updateProstheticType(this.value)">
-                                            <option value="mechanical">Mecânica</option>
-                                            <option value="bio_tech">Bio-Tech</option>
-                                            <option value="crude">Improvisada</option>
-                                            <option value="advanced">Avançada</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="prosthetic-quality">Qualidade:</label>
-                                        <select id="prosthetic-quality" onchange="updateProstheticQuality(this.value)">
-                                            <option value="functional">Funcional</option>
-                                            <option value="crude">Tosca</option>
-                                            <option value="advanced">Avançada</option>
-                                            <option value="military_grade">Grau Militar</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>
-                                <input type="checkbox" id="augmentations-enabled" onchange="toggleAugmentations(this.checked)">
-                                Possui Augmentações
-                            </label>
-                            
-                            <div id="augmentations-options" style="display: none; margin-top: 10px;">
-                                <label>Tipos de Augmentação:</label>
-                                <div class="checkbox-grid">
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="aug-cybernetic-eye" onchange="updateAugmentation('cybernetic_eye', this.checked)">
-                                        <label for="aug-cybernetic-eye">Olho Cibernético</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="aug-neural-implant" onchange="updateAugmentation('neural_implant', this.checked)">
-                                        <label for="aug-neural-implant">Implante Neural</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="aug-subdermal-armor" onchange="updateAugmentation('subdermal_armor', this.checked)">
-                                        <label for="aug-subdermal-armor">Armadura Subdérmica</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="aug-enhanced-reflexes" onchange="updateAugmentation('enhanced_reflexes', this.checked)">
-                                        <label for="aug-enhanced-reflexes">Reflexos Aprimorados</label>
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="aug-radiation-filter" onchange="updateAugmentation('radiation_filter', this.checked)">
-                                        <label for="aug-radiation-filter">Filtro de Radiação</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group" style="margin-top: 10px;">
-                                    <label for="aug-visibility">Visibilidade:</label>
-                                    <select id="aug-visibility" onchange="updateAugmentationVisibility(this.value)">
-                                        <option value="hidden">Oculta</option>
-                                        <option value="subtle">Sutil</option>
-                                        <option value="obvious">Óbvia</option>
-                                        <option value="prominent">Proeminente</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                <div class="nav-card" data-target="resources.html" data-category="resources">
+                    <div class="nav-header">
+                        <div class="nav-icon">📚</div>
+                        <span class="nav-badge">Extra</span>
+                    </div>
+                    <h3>Recursos Adicionais</h3>
+                    <p>Materiais de apoio, tabelas de referência e conteúdo extra para suas sessões</p>
+                    <div class="nav-features">
+                        <span class="feature">• Tabelas de referência</span>
+                        <span class="feature">• NPCs prontos</span>
+                        <span class="feature">• Ganchos de aventura</span>
+                        <span class="feature">• Dicas de mestre</span>
+                    </div>
+                    <div class="nav-action">Ver Recursos →</div>
+                </div>
+            </nav>
+
+            <section class="quick-start">
+                <h2>🚀 Início Rápido</h2>
+                <div class="quick-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>Leia o Guia</h4>
+                        <p>Entenda as regras básicas do Call of Cthulhu</p>
+                        <a href="guide.html" class="step-link">📖 Abrir Guia</a>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>Crie Personagens</h4>
+                        <p>Use o gerador para criar investigadores</p>
+                        <a href="generator.html" class="step-link">🎲 Abrir Gerador</a>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>Jogue o Cenário</h4>
+                        <p>Explore o mistério das Agulhas Negras</p>
+                        <a href="scenario.html" class="step-link">🏔️ Ver Cenário</a>
                     </div>
                 </div>
+            </section>
 
-                <!-- Battle Damage -->
-                <div class="modification-section">
-                    <h4>⚔️ Danos de Batalha e Mutações</h4>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="character-scars">Cicatrizes:</label>
-                            <select id="character-scars" onchange="updateBattleDamage('scars', this.value)">
-                                <option value="few">Poucas</option>
-                                <option value="none">Nenhuma</option>
-                                <option value="moderate">Moderadas</option>
-                                <option value="extensive">Extensas</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="radiation-effects">Efeitos de Radiação:</label>
-                            <select id="radiation-effects" onchange="updateBattleDamage('radiationEffects', this.value)">
-                                <option value="none">Nenhum</option>
-                                <option value="mild">Leve</option>
-                                <option value="moderate">Moderado</option>
-                                <option value="severe">Severo</option>
-                            </select>
-                        </div>
+            <section class="world-info">
+                <h2>🌿 O Mundo de 2053</h2>
+                <div class="world-cards">
+                    <div class="world-card">
+                        <div class="world-icon">🏙️</div>
+                        <h4>Cidades Mortas</h4>
+                        <p>As grandes metrópoles são ruínas radioativas. Apenas pequenas comunidades rurais sobreviveram à devastação.</p>
+                    </div>
+                    <div class="world-card">
+                        <div class="world-icon">🌱</div>
+                        <h4>Zonas de Regeneração</h4>
+                        <p>Oásis de vida em meio à destruição. Lugares onde a natureza voltou a florescer e os sobreviventes se reorganizam.</p>
+                    </div>
+                    <div class="world-card">
+                        <div class="world-icon">📻</div>
+                        <h4>Redes de Sobreviventes</h4>
+                        <p>Comunicação por rádio conecta as comunidades isoladas. Compartilhamento de recursos e conhecimento.</p>
+                    </div>
+                    <div class="world-card">
+                        <div class="world-icon">❓</div>
+                        <h4>Mistérios Emergentes</h4>
+                        <p>A guerra não apenas destruiu o mundo... ela pode ter despertado coisas que deveriam permanecer dormindo.</p>
                     </div>
                 </div>
+            </section>
+        </main>
 
-                <!-- Action Buttons -->
-                <div class="action-buttons">
-                    <button class="btn" onclick="generateFromAttributes()">🎲 Gerar das Características</button>
-                    <button class="btn btn-secondary" onclick="randomizePhysical()">🎯 Aleatorizar Físico</button>
-                    <button class="btn" onclick="applyOccupationModifications()">⚙️ Aplicar Ocupação</button>
-                    <button class="btn btn-danger" onclick="resetPhysicalCharacteristics()">🔄 Resetar Físico</button>
+        <footer class="main-footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Sistema</h4>
+                    <p>Baseado em Call of Cthulhu 7ª Edição</p>
+                    <p>Cenário original Rolai</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Ambientação</h4>
+                    <p>Brasil pós-apocalíptico, 2053</p>
+                    <p>Horror cósmico investigativo</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Para Jogar</h4>
+                    <p>1 Mestre + 3-6 Jogadores</p>
+                    <p>Dados de 100 lados</p>
                 </div>
             </div>
-        </div>
-
-        <!-- Attributes Tab -->
-        <div id="attributes" class="tab-content">
-            <div class="info-box">
-                <h3>📊 Sistema de Atributos - Call of Cthulhu</h3>
-                <p><strong>Valores Base:</strong> Atributos variam de 15 a 90 (3-18 × 5)</p>
-                <p><strong>Recomendação:</strong> INT e POD de pelo menos 40 para investigadores eficazes</p>
-                <p><strong>Importante:</strong> Use valores em múltiplos de 5 para facilitar os cálculos</p>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Rolai - Sistema para Call of Cthulhu • Feito com ❤️ para investigadores corajosos</p>
             </div>
-
-            <div class="section">
-                <h2>🎲 Geração de Atributos</h2>
-                
-                <div class="attribute-generation">
-                    <div class="generation-method" id="rollMethod" onclick="selectGenerationMethod('roll')">
-                        <h4>🎲 Método Padrão</h4>
-                        <p>3d6 × 5 para cada</p>
-                        <p style="font-size: 0.9em; color: #888;">Totalmente aleatório</p>
-                    </div>
-                    <div class="generation-method" id="rollMethod2" onclick="selectGenerationMethod('roll2')">
-                        <h4>🎯 Método Heroico</h4>
-                        <p>5× (3d6) + 3× (2d6+6)</p>
-                        <p style="font-size: 0.9em; color: #888;">Distribuir resultados</p>
-                    </div>
-                    <div class="generation-method active" id="pointMethod" onclick="selectGenerationMethod('points')">
-                        <h4>📊 Compra de Pontos</h4>
-                        <p>460 pontos totais</p>
-                        <p style="font-size: 0.9em; color: #888;">Balanceado e estratégico</p>
-                    </div>
-                </div>
-
-                <div id="rollDiceSection" style="display: none;">
-                    <button class="btn" onclick="rollAllAttributes()">🎲 Rolar Todos os Atributos</button>
-                    <div id="diceResults"></div>
-                </div>
-
-                <div id="rollHeroicSection" style="display: none;">
-                    <button class="btn" onclick="rollHeroicAttributes()">🎲 Rolar Método Heroico</button>
-                    <div id="heroicResults"></div>
-                    <div class="method-description">
-                        <p>Este método gera 8 valores: 5 usando 3d6 e 3 usando 2d6+6 (valores mais altos).</p>
-                        <p>Você pode então distribuir estes valores como desejar entre os atributos.</p>
-                    </div>
-                </div>
-
-                <div id="pointsSection">
-                    <div class="points-display">
-                        <div>📊 Pontos Totais: <span id="totalPoints">400</span>/460</div>
-                        <div>⚔️ Pontos Restantes: <span id="remainingPoints">60</span></div>
-                    </div>
-                    <div class="method-description">
-                        <p>Distribua 460 pontos entre os 8 atributos. Cada atributo deve estar entre 15 e 90.</p>
-                        <p>Recomenda-se INT e POD de pelo menos 40 para um investigador eficaz.</p>
-                    </div>
-                </div>
-
-                <div class="attributes-grid">
-                    <div class="attribute-item">
-                        <div class="attribute-name">
-                            <span>Força (FOR/STR)</span>
-                            <small>Poder físico bruto</small>
-                        </div>
-                        <div class="attribute-half-value">Metade: <span id="str-half">25</span></div>
-                        <div class="attribute-value">
-                            <button onclick="modifyAttribute('str', -5)" id="str-minus">-</button>
-                            <span id="str-value">50</span>
-                            <button onclick="modifyAttribute('str', 5)" id="str-plus">+</button>
-                        </div>
-                    </div>
-                    
-                    <div class="attribute-item">
-                        <div class="attribute-name">
-                            <span>Constituição (CON)</span>
-                            <small>Resistência e saúde</small>
-                        </div>
-                        <div class="attribute-half-value">Metade: <span id="con-half">25</span></div>
-                        <div class="attribute-value">
-                            <button onclick="modifyAttribute('con', -5)" id="con-minus">-</button>
-                            <span id="con-value">50</span>
-                            <button onclick="modifyAttribute('con', 5)" id="con-plus">+</button>
-                        </div>
-                    </div>
-                    
-                    <div class="attribute-item">
-                        <div class="attribute-name">
-                            <span>Tamanho (TAM/SIZ)</span>
-                            <small>Porte físico</small>
-                        </div>
-                        <div class="attribute-half-value">Metade: <span id="siz-half">25</span></div>
-                        <div class="attribute-value">
-                            <button onclick="modifyAttribute('siz', -5)" id="siz-minus">-</button>
-                            <span id="siz-value">50</span>
-                            <button onclick="modifyAttribute('siz', 5)" id="siz-plus">+</button>
-                        </div>
-                    </div>
-                    
-                    <div class="attribute-item">
-                        <div class="attribute-name">
-                            <span>Destreza (DES/DEX)</span>
-                            <small>Agilidade e reflexos</small>
-                        </div>
-                        <div class="attribute-half-value">Metade: <span id="dex-half">25</span></div>
-                        <div class="attribute-value">
-                            <button onclick="modifyAttribute('dex', -5)" id="dex-minus">-</button>
-                            <span id="dex-value">50</span>
-                            <button onclick="modifyAttribute('dex', 5)" id="dex-plus">+</button>
-                        </div>
-                    </div>
-                    
-                    <div class="attribute-item">
-                        <div class="attribute-name">
-                            <span>Aparência (APA/APP)</span>
-                            <small>Carisma e presença</small>
-                        </div>
-                        <div class="attribute-half-value">Metade: <span id="app-half">25</span></div>
-                        <div class="attribute-value">
-                            <button onclick="modifyAttribute('app', -5)" id="app-minus">-</button>
-                            <span id="app-value">50</span>
-                            <button onclick="modifyAttribute('app', 5)" id="app-plus">+</button>
-                        </div>
-                    </div>
-                    
-                    <div class="attribute-item">
-                        <div class="attribute-name">
-                            <span>Inteligência (INT)</span>
-                            <small>Raciocínio e aprendizado</small>
-                        </div>
-                        <div class="attribute-half-value">Metade: <span id="int-half">25</span></div>
-                        <div class="attribute-value">
-                            <button onclick="modifyAttribute('int', -5)" id="int-minus">-</button>
-                            <span id="int-value">50</span>
-                            <button onclick="modifyAttribute('int', 5)" id="int-plus">+</button>
-                        </div>
-                    </div>
-                    
-                    <div class="attribute-item">
-                        <div class="attribute-name">
-                            <span>Poder (POD/POW)</span>
-                            <small>Força de vontade</small>
-                        </div>
-                        <div class="attribute-half-value">Metade: <span id="pow-half">25</span></div>
-                        <div class="attribute-value">
-                            <button onclick="modifyAttribute('pow', -5)" id="pow-minus">-</button>
-                            <span id="pow-value">50</span>
-                            <button onclick="modifyAttribute('pow', 5)" id="pow-plus">+</button>
-                        </div>
-                    </div>
-                    
-                    <div class="attribute-item">
-                        <div class="attribute-name">
-                            <span>Educação (EDU)</span>
-                            <small>Conhecimento formal</small>
-                        </div>
-                        <div class="attribute-half-value">Metade: <span id="edu-half">25</span></div>
-                        <div class="attribute-value">
-                            <button onclick="modifyAttribute('edu', -5)" id="edu-minus">-</button>
-                            <span id="edu-value">50</span>
-                            <button onclick="modifyAttribute('edu', 5)" id="edu-plus">+</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Skills Tab -->
-        <div id="skills" class="tab-content">
-            <div class="info-box">
-                <h3>📚 Sistema de Perícias - Call of Cthulhu</h3>
-                <p><strong>Perícias Ocupacionais:</strong> EDU × 4 pontos (representa treinamento profissional)</p>
-                <p><strong>Perícias de Interesse Pessoal:</strong> INT × 2 pontos (hobbies e talentos naturais)</p>
-                <p>Distribua seus pontos com sabedoria - cada perícia tem um valor base que representa conhecimento comum.</p>
-            </div>
-
-            <div class="section">
-                <h2>🎯 Perícias Ocupacionais</h2>
-                <div class="points-display">
-                    <div>📘 Pontos Ocupacionais: <span id="occupationalPoints">200</span></div>
-                    <div>💡 Pontos Usados: <span id="usedOccupationalPoints">0</span></div>
-                </div>
-                
-                <div class="skills-grid" id="occupationalSkillsGrid">
-                    <!-- Preenchido dinamicamente -->
-                </div>
-            </div>
-
-            <div class="section">
-                <h2>🌟 Perícias de Interesse Pessoal</h2>
-                <div class="points-display">
-                    <div>🎯 Pontos Pessoais: <span id="personalPoints">100</span></div>
-                    <div>⚡ Pontos Usados: <span id="usedPersonalPoints">0</span></div>
-                </div>
-                
-                <div class="skills-grid" id="personalSkillsGrid">
-                    <!-- Preenchido dinamicamente -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Character Sheet Tab -->
-        <div id="sheet" class="tab-content">
-            <div class="character-sheet">
-                <h2>📜 Ficha do Investigador</h2>
-                
-                <div class="sheet-section">
-                    <h3>👤 Identificação</h3>
-                    <div class="sheet-header">
-                        <div class="sheet-image" id="sheetImage">
-                            <div class="no-image">👤</div>
-                        </div>
-                        <div class="sheet-info" id="sheetBasicInfo"></div>
-                    </div>
-                </div>
-                
-                <div class="sheet-section">
-                    <h3>🧬 Características Físicas Detalhadas</h3>
-                    <div id="sheetPhysicalCharacteristics"></div>
-                </div>
-                
-                <div class="sheet-section">
-                    <h3>📊 Atributos</h3>
-                    <div id="sheetAttributes"></div>
-                </div>
-
-                <div class="sheet-section">
-                    <h3>💫 Características Derivadas</h3>
-                    <div class="derived-stats">
-                        <div class="stat-item">
-                            <div class="stat-name">Pontos de Vida</div>
-                            <div class="stat-value" id="hitPoints">10</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-name">Sanidade Inicial</div>
-                            <div class="stat-value" id="sanity">50</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-name">Pontos de Magia</div>
-                            <div class="stat-value" id="magicPoints">10</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-name">Bônus de Dano</div>
-                            <div class="stat-value" id="damageBonus">0</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-name">Movimento</div>
-                            <div class="stat-value" id="movement">8</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-name">Esquiva</div>
-                            <div class="stat-value" id="dodge">25</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="sheet-section">
-                    <h3>🎯 Perícias</h3>
-                    <div id="sheetSkills"></div>
-                </div>
-                
-                <div style="margin-top: 30px;">
-                    <button class="btn" onclick="exportCharacter()">💾 Exportar Ficha</button>
-                    <button class="btn btn-secondary" onclick="printCharacter()">🖨️ Imprimir</button>
-                    <button class="btn" onclick="showCharacterValidation()">✅ Validar</button>
-                    <button class="btn btn-danger" onclick="resetCharacter()">🔄 Resetar Tudo</button>
-                </div>
-            </div>
-        </div>
+        </footer>
     </div>
 
-<!-- Load main.js FIRST -->
-<script src="js/main.js"></script>
-
-<!-- Then load data files -->
-<script src="data/occupations.js"></script>
-<script src="data/skills.js"></script>
-<script src="data/character-data.js"></script>
-<script src="data/attributes.js"></script>
-
-<!-- Then load feature modules -->
-<script src="js/skills-management.js"></script>
-<script src="js/dice-rolling.js"></script>
-<script src="js/character-sheet.js"></script>
-   
+    <script>
+        // Navegação simplificada
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Rolai carregado com sucesso!');
+            
+            // Configura navegação dos cards
+            const navCards = document.querySelectorAll('[data-target]');
+            navCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = this.dataset.target;
+                    
+                    // Animação de clique
+                    this.style.transform = 'scale(0.98)';
+                    this.style.transition = 'transform 0.2s ease';
+                    
+                    // Navega após pequena pausa
+                    setTimeout(() => {
+                        window.location.href = target;
+                    }, 200);
+                });
+            });
+            
+            // Indicador de scroll
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            window.addEventListener('scroll', function() {
+                const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+                scrollIndicator.style.width = Math.min(scrolled, 100) + '%';
+            });
+            
+            // Animações suaves para elementos
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            // Anima cards quando entram na tela
+            const cards = document.querySelectorAll('.world-card, .step, .nav-card');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
 </body>
 </html>

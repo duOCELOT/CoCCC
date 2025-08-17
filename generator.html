@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rolai - Criador de Personagens Aprimorado</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><span class="radiation-symbol">☢</span> Rolai - Criador de Personagens <span class="radiation-symbol">☢</span></h1>
+            <div class="subtitle">Ecos da Terra Queimada • Call of Cthulhu 2053 • Sistema Físico Detalhado</div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('info')">🧬 Info Detalhada</button>
+            <button class="tab-button" onclick="showTab('attributes')">💪 Atributos</button>
+            <button class="tab-button" onclick="showTab('skills')">🎯 Perícias</button>
+            <button class="tab-button" onclick="showTab('sheet')">📄 Ficha Final</button>
+        </div>
+
+        <div id="info" class="tab-content active">
+            <div class="info-box">
+                <h3>🌿 Bem-vindo a Itatiaia, 2053</h3>
+                <p>A Terceira Guerra Mundial varreu as grandes cidades do mundo. Mas aqui, nas montanhas entre Rio e São Paulo, a vida continua, de certa forma. Itatiaia e outras pequenas cidades remotas sobreviveram - longe demais dos alvos estratégicos, protegidas pela geografia, esquecidas pela guerra. Nos últimos anos, reconstruímos uma vida quase normal. Temos eletricidade da velha hidrelétrica, cultivamos nossa comida, e até restabelecemos contato com outros bolsões de sobreviventes. Para nossos filhos, este é o único mundo que conhecem - seguro, pequeno, mas nosso. Só que ultimamente, exploradores têm encontrado coisas estranhas nas ruínas das metrópoles mortas. E alguns juram que a destruição despertou algo que deveria ter permanecido adormecido.</p>
+            </div>
+
+            <!-- Basic Character Info -->
+            <div class="section">
+                <h2>🎭 Informações Básicas do Investigador</h2>
+                
+                <div class="form-group">
+                    <label for="characterName">Nome do Investigador:</label>
+                    <input type="text" id="characterName" placeholder="Ex: Dr. Marcus 'Sucata' Silva" onchange="updateCharacterData()">
+                </div>
+
+                <div class="form-group">
+                    <label for="characterAge">Idade:</label>
+                    <input type="number" id="characterAge" min="15" max="90" placeholder="15-90 anos" onchange="updateCharacterData()">
+                </div>
+
+                <div class="form-group">
+                    <label for="occupationSelect">Ocupação no Mundo Devastado:</label>
+                    <select id="occupationSelect" onchange="updateOccupationInfo()">
+                        <option value="">Selecione uma ocupação...</option>
+                        <option value="scavenger">Sucateiro - Encontra tesouros nos escombros</option>
+                        <option value="mechanic">Mecânico - Mantém máquinas funcionando</option>
+                        <option value="medic">Médico de Campo - Cura sem recursos</option>
+                        <option value="trader">Comerciante - Negocia entre assentamentos</option>
+                        <option value="guard">Guarda - Protege os fracos</option>
+                        <option value="scout">Explorador - Desbrava o desconhecido</option>
+                        <option value="cultist">Cultista - Conhece segredos proibidos</option>
+                        <option value="mutant_hunter">Caçador de Mutantes - Elimina aberrações</option>
+                        <option value="scholar">Acadêmico - Preserva o conhecimento antigo</option>
+                        <option value="custom">✏️ Criar Ocupação Personalizada</option>
+                    </select>
+                </div>
+
+                <div id="occupationInfo"></div>
+
+                <div class="custom-occupation" id="customOccupationGroup">
+                    <div class="form-group">
+                        <label for="customOccupationName">Nome da Ocupação:</label>
+                        <input type="text" id="customOccupationName" placeholder="Ex: Xamã Tecnológico" onchange="updateCharacterData()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customOccupationDesc">Descrição:</label>
+                        <textarea id="customOccupationDesc" placeholder="Descreva o papel desta ocupação no mundo devastado..." onchange="updateCharacterData()"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="characterBackground">História de Sobrevivência:</label>
+                    <textarea id="characterBackground" placeholder="Como você sobreviveu à guerra? O que perdeu? O que ainda busca neste mundo morto? Quais são suas motivações e objetivos?" onchange="updateCharacterData()"></textarea>
+                </div>
+            </div>
+
+            <!-- Enhanced Physical Characteristics -->
+            <div class="physical-characteristics">
+                <h2>🧬 Características Físicas Detalhadas</h2>
+                
+                <div class="characteristics-grid">
+                    <!-- Basic Demographics -->
+                    <div class="characteristic-group">
+                        <h3>👤 Demografia Básica</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="characterGender">Gênero:</label>
+                                <select id="characterGender" onchange="updatePhysical('gender', this.value)">
+                                    <option value="person">Neutro/Pessoa</option>
+                                    <option value="female">Feminino</option>
+                                    <option value="male">Masculino</option>
+                                    <option value="non-binary">Não-binário</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="characterEthnicity">Etnia:</label>
+                                <select id="characterEthnicity" onchange="updatePhysical('ethnicity', this.value)">
+                                    <option value="mixed">Mista</option>
+                                    <option value="latino">Latino</option>
+                                    <option value="caucasian">Caucasiana</option>
+                                    <option value="african">Africana</option>
+                                    <option value="asian">Asiática</option>
+                                    <option value="indigenous">Indígena</option>
+                                    <option value="other">Outra</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="characterSkinTone">Tom de Pele:</label>
+                                <select id="characterSkinTone" onchange="updatePhysical('skinTone', this.value)">
+                                    <option value="medium">Médio</option>
+                                    <option value="light">Claro</option>
+                                    <option value="tan">Bronzeado</option>
+                                    <option value="dark">Escuro</option>
+                                    <option value="very_light">Muito Claro</option>
+                                    <option value="very_dark">Muito Escuro</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="characterEyeColor">Cor dos Olhos:</label>
+                                <select id="characterEyeColor" onchange="updatePhysical('eyeColor', this.value)">
+                                    <option value="brown">Castanho</option>
+                                    <option value="blue">Azul</option>
+                                    <option value="green">Verde</option>
+                                    <option value="hazel">Avelã</option>
+                                    <option value="amber">Âmbar</option>
+                                    <option value="gray">Cinza</option>
+                                    <option value="heterochromia">Heterocromia</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Facial Features -->
+                    <div class="characteristic-group">
+                        <h3>👁️ Características Faciais</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="characterHairColor">Cor do Cabelo:</label>
+                                <select id="characterHairColor" onchange="updatePhysical('hairColor', this.value)">
+                                    <option value="dark_brown">Castanho Escuro</option>
+                                    <option value="black">Preto</option>
+                                    <option value="brown">Castanho</option>
+                                    <option value="light_brown">Castanho Claro</option>
+                                    <option value="blonde">Loiro</option>
+                                    <option value="red">Ruivo</option>
+                                    <option value="gray">Grisalho</option>
+                                    <option value="white">Branco</option>
+                                    <option value="dyed">Colorido</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="characterHairStyle">Estilo do Cabelo:</label>
+                                <select id="characterHairStyle" onchange="updatePhysical('hairStyle', this.value)">
+                                    <option value="short">Curto</option>
+                                    <option value="medium">Médio</option>
+                                    <option value="long">Longo</option>
+                                    <option value="bald">Careca</option>
+                                    <option value="buzzcut">Raspado</option>
+                                    <option value="ponytail">Rabo de Cavalo</option>
+                                    <option value="braided">Trançado</option>
+                                    <option value="messy">Bagunçado</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="facialExpression">Expressão:</label>
+                                <select id="facialExpression" onchange="updatePhysical('facialExpression', this.value)">
+                                    <option value="determined">Determinada</option>
+                                    <option value="calm">Calma</option>
+                                    <option value="alert">Alerta</option>
+                                    <option value="worried">Preocupada</option>
+                                    <option value="confident">Confiante</option>
+                                    <option value="suspicious">Desconfiada</option>
+                                    <option value="tired">Cansada</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="characterPosture">Postura:</label>
+                                <select id="characterPosture" onchange="updatePhysical('posture', this.value)">
+                                    <option value="confident">Confiante</option>
+                                    <option value="alert">Alerta</option>
+                                    <option value="relaxed">Relaxada</option>
+                                    <option value="nervous">Nervosa</option>
+                                    <option value="aggressive">Agressiva</option>
+                                    <option value="cautious">Cautelosa</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Body Characteristics -->
+                    <div class="characteristic-group">
+                        <h3>🏃‍♂️ Físico e Estatura</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bodyType">Tipo Corporal:</label>
+                                <select id="bodyType" onchange="updatePhysical('bodyType', this.value)">
+                                    <option value="average">Médio</option>
+                                    <option value="thin">Magro</option>
+                                    <option value="lean">Esbelto</option>
+                                    <option value="athletic">Atlético</option>
+                                    <option value="stocky">Robusto</option>
+                                    <option value="heavy">Pesado</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="characterHeight">Altura:</label>
+                                <select id="characterHeight" onchange="updatePhysical('height', this.value)">
+                                    <option value="average">Média</option>
+                                    <option value="short">Baixo</option>
+                                    <option value="tall">Alto</option>
+                                    <option value="very_short">Muito Baixo</option>
+                                    <option value="very_tall">Muito Alto</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="clothingStyle">Estilo de Roupa:</label>
+                            <select id="clothingStyle" onchange="updatePhysical('clothingStyle', this.value)">
+                                <option value="practical">Prática</option>
+                                <option value="military">Militar</option>
+                                <option value="scavenged">Recuperada</option>
+                                <option value="well_maintained">Bem Cuidada</option>
+                                <option value="ragged">Esfarrapada</option>
+                                <option value="formal">Formal</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prosthetics and Augmentations -->
+                <div class="modification-section">
+                    <h4>🦾 Próteses e Augmentações</h4>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="prosthetics-enabled" onchange="toggleProsthetics(this.checked)">
+                                Possui Próteses
+                            </label>
+                            
+                            <div id="prosthetics-options" style="display: none; margin-top: 10px;">
+                                <label>Membros Protéticos:</label>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="prosthetic-left-arm" onchange="updateProstheticLimb('left_arm', this.checked)">
+                                        <label for="prosthetic-left-arm">Braço Esquerdo</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="prosthetic-right-arm" onchange="updateProstheticLimb('right_arm', this.checked)">
+                                        <label for="prosthetic-right-arm">Braço Direito</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="prosthetic-left-leg" onchange="updateProstheticLimb('left_leg', this.checked)">
+                                        <label for="prosthetic-left-leg">Perna Esquerda</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="prosthetic-right-leg" onchange="updateProstheticLimb('right_leg', this.checked)">
+                                        <label for="prosthetic-right-leg">Perna Direita</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="prosthetic-left-hand" onchange="updateProstheticLimb('left_hand', this.checked)">
+                                        <label for="prosthetic-left-hand">Mão Esquerda</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="prosthetic-right-hand" onchange="updateProstheticLimb('right_hand', this.checked)">
+                                        <label for="prosthetic-right-hand">Mão Direita</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label for="prosthetic-type">Tipo:</label>
+                                        <select id="prosthetic-type" onchange="updateProstheticType(this.value)">
+                                            <option value="mechanical">Mecânica</option>
+                                            <option value="bio_tech">Bio-Tech</option>
+                                            <option value="crude">Improvisada</option>
+                                            <option value="advanced">Avançada</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="prosthetic-quality">Qualidade:</label>
+                                        <select id="prosthetic-quality" onchange="updateProstheticQuality(this.value)">
+                                            <option value="functional">Funcional</option>
+                                            <option value="crude">Tosca</option>
+                                            <option value="advanced">Avançada</option>
+                                            <option value="military_grade">Grau Militar</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="augmentations-enabled" onchange="toggleAugmentations(this.checked)">
+                                Possui Augmentações
+                            </label>
+                            
+                            <div id="augmentations-options" style="display: none; margin-top: 10px;">
+                                <label>Tipos de Augmentação:</label>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="aug-cybernetic-eye" onchange="updateAugmentation('cybernetic_eye', this.checked)">
+                                        <label for="aug-cybernetic-eye">Olho Cibernético</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="aug-neural-implant" onchange="updateAugmentation('neural_implant', this.checked)">
+                                        <label for="aug-neural-implant">Implante Neural</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="aug-subdermal-armor" onchange="updateAugmentation('subdermal_armor', this.checked)">
+                                        <label for="aug-subdermal-armor">Armadura Subdérmica</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="aug-enhanced-reflexes" onchange="updateAugmentation('enhanced_reflexes', this.checked)">
+                                        <label for="aug-enhanced-reflexes">Reflexos Aprimorados</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="aug-radiation-filter" onchange="updateAugmentation('radiation_filter', this.checked)">
+                                        <label for="aug-radiation-filter">Filtro de Radiação</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group" style="margin-top: 10px;">
+                                    <label for="aug-visibility">Visibilidade:</label>
+                                    <select id="aug-visibility" onchange="updateAugmentationVisibility(this.value)">
+                                        <option value="hidden">Oculta</option>
+                                        <option value="subtle">Sutil</option>
+                                        <option value="obvious">Óbvia</option>
+                                        <option value="prominent">Proeminente</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Battle Damage -->
+                <div class="modification-section">
+                    <h4>⚔️ Danos de Batalha e Mutações</h4>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="character-scars">Cicatrizes:</label>
+                            <select id="character-scars" onchange="updateBattleDamage('scars', this.value)">
+                                <option value="few">Poucas</option>
+                                <option value="none">Nenhuma</option>
+                                <option value="moderate">Moderadas</option>
+                                <option value="extensive">Extensas</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="radiation-effects">Efeitos de Radiação:</label>
+                            <select id="radiation-effects" onchange="updateBattleDamage('radiationEffects', this.value)">
+                                <option value="none">Nenhum</option>
+                                <option value="mild">Leve</option>
+                                <option value="moderate">Moderado</option>
+                                <option value="severe">Severo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn" onclick="generateFromAttributes()">🎲 Gerar das Características</button>
+                    <button class="btn btn-secondary" onclick="randomizePhysical()">🎯 Aleatorizar Físico</button>
+                    <button class="btn" onclick="applyOccupationModifications()">⚙️ Aplicar Ocupação</button>
+                    <button class="btn btn-danger" onclick="resetPhysicalCharacteristics()">🔄 Resetar Físico</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attributes Tab -->
+        <div id="attributes" class="tab-content">
+            <div class="info-box">
+                <h3>📊 Sistema de Atributos - Call of Cthulhu</h3>
+                <p><strong>Valores Base:</strong> Atributos variam de 15 a 90 (3-18 × 5)</p>
+                <p><strong>Recomendação:</strong> INT e POD de pelo menos 40 para investigadores eficazes</p>
+                <p><strong>Importante:</strong> Use valores em múltiplos de 5 para facilitar os cálculos</p>
+            </div>
+
+            <div class="section">
+                <h2>🎲 Geração de Atributos</h2>
+                
+                <div class="attribute-generation">
+                    <div class="generation-method" id="rollMethod" onclick="selectGenerationMethod('roll')">
+                        <h4>🎲 Método Padrão</h4>
+                        <p>3d6 × 5 para cada</p>
+                        <p style="font-size: 0.9em; color: #888;">Totalmente aleatório</p>
+                    </div>
+                    <div class="generation-method" id="rollMethod2" onclick="selectGenerationMethod('roll2')">
+                        <h4>🎯 Método Heroico</h4>
+                        <p>5× (3d6) + 3× (2d6+6)</p>
+                        <p style="font-size: 0.9em; color: #888;">Distribuir resultados</p>
+                    </div>
+                    <div class="generation-method active" id="pointMethod" onclick="selectGenerationMethod('points')">
+                        <h4>📊 Compra de Pontos</h4>
+                        <p>460 pontos totais</p>
+                        <p style="font-size: 0.9em; color: #888;">Balanceado e estratégico</p>
+                    </div>
+                </div>
+
+                <div id="rollDiceSection" style="display: none;">
+                    <button class="btn" onclick="rollAllAttributes()">🎲 Rolar Todos os Atributos</button>
+                    <div id="diceResults"></div>
+                </div>
+
+                <div id="rollHeroicSection" style="display: none;">
+                    <button class="btn" onclick="rollHeroicAttributes()">🎲 Rolar Método Heroico</button>
+                    <div id="heroicResults"></div>
+                    <div class="method-description">
+                        <p>Este método gera 8 valores: 5 usando 3d6 e 3 usando 2d6+6 (valores mais altos).</p>
+                        <p>Você pode então distribuir estes valores como desejar entre os atributos.</p>
+                    </div>
+                </div>
+
+                <div id="pointsSection">
+                    <div class="points-display">
+                        <div>📊 Pontos Totais: <span id="totalPoints">400</span>/460</div>
+                        <div>⚔️ Pontos Restantes: <span id="remainingPoints">60</span></div>
+                    </div>
+                    <div class="method-description">
+                        <p>Distribua 460 pontos entre os 8 atributos. Cada atributo deve estar entre 15 e 90.</p>
+                        <p>Recomenda-se INT e POD de pelo menos 40 para um investigador eficaz.</p>
+                    </div>
+                </div>
+
+                <div class="attributes-grid">
+                    <div class="attribute-item">
+                        <div class="attribute-name">
+                            <span>Força (FOR/STR)</span>
+                            <small>Poder físico bruto</small>
+                        </div>
+                        <div class="attribute-half-value">Metade: <span id="str-half">25</span></div>
+                        <div class="attribute-value">
+                            <button onclick="modifyAttribute('str', -5)" id="str-minus">-</button>
+                            <span id="str-value">50</span>
+                            <button onclick="modifyAttribute('str', 5)" id="str-plus">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="attribute-item">
+                        <div class="attribute-name">
+                            <span>Constituição (CON)</span>
+                            <small>Resistência e saúde</small>
+                        </div>
+                        <div class="attribute-half-value">Metade: <span id="con-half">25</span></div>
+                        <div class="attribute-value">
+                            <button onclick="modifyAttribute('con', -5)" id="con-minus">-</button>
+                            <span id="con-value">50</span>
+                            <button onclick="modifyAttribute('con', 5)" id="con-plus">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="attribute-item">
+                        <div class="attribute-name">
+                            <span>Tamanho (TAM/SIZ)</span>
+                            <small>Porte físico</small>
+                        </div>
+                        <div class="attribute-half-value">Metade: <span id="siz-half">25</span></div>
+                        <div class="attribute-value">
+                            <button onclick="modifyAttribute('siz', -5)" id="siz-minus">-</button>
+                            <span id="siz-value">50</span>
+                            <button onclick="modifyAttribute('siz', 5)" id="siz-plus">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="attribute-item">
+                        <div class="attribute-name">
+                            <span>Destreza (DES/DEX)</span>
+                            <small>Agilidade e reflexos</small>
+                        </div>
+                        <div class="attribute-half-value">Metade: <span id="dex-half">25</span></div>
+                        <div class="attribute-value">
+                            <button onclick="modifyAttribute('dex', -5)" id="dex-minus">-</button>
+                            <span id="dex-value">50</span>
+                            <button onclick="modifyAttribute('dex', 5)" id="dex-plus">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="attribute-item">
+                        <div class="attribute-name">
+                            <span>Aparência (APA/APP)</span>
+                            <small>Carisma e presença</small>
+                        </div>
+                        <div class="attribute-half-value">Metade: <span id="app-half">25</span></div>
+                        <div class="attribute-value">
+                            <button onclick="modifyAttribute('app', -5)" id="app-minus">-</button>
+                            <span id="app-value">50</span>
+                            <button onclick="modifyAttribute('app', 5)" id="app-plus">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="attribute-item">
+                        <div class="attribute-name">
+                            <span>Inteligência (INT)</span>
+                            <small>Raciocínio e aprendizado</small>
+                        </div>
+                        <div class="attribute-half-value">Metade: <span id="int-half">25</span></div>
+                        <div class="attribute-value">
+                            <button onclick="modifyAttribute('int', -5)" id="int-minus">-</button>
+                            <span id="int-value">50</span>
+                            <button onclick="modifyAttribute('int', 5)" id="int-plus">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="attribute-item">
+                        <div class="attribute-name">
+                            <span>Poder (POD/POW)</span>
+                            <small>Força de vontade</small>
+                        </div>
+                        <div class="attribute-half-value">Metade: <span id="pow-half">25</span></div>
+                        <div class="attribute-value">
+                            <button onclick="modifyAttribute('pow', -5)" id="pow-minus">-</button>
+                            <span id="pow-value">50</span>
+                            <button onclick="modifyAttribute('pow', 5)" id="pow-plus">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="attribute-item">
+                        <div class="attribute-name">
+                            <span>Educação (EDU)</span>
+                            <small>Conhecimento formal</small>
+                        </div>
+                        <div class="attribute-half-value">Metade: <span id="edu-half">25</span></div>
+                        <div class="attribute-value">
+                            <button onclick="modifyAttribute('edu', -5)" id="edu-minus">-</button>
+                            <span id="edu-value">50</span>
+                            <button onclick="modifyAttribute('edu', 5)" id="edu-plus">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills Tab -->
+        <div id="skills" class="tab-content">
+            <div class="info-box">
+                <h3>📚 Sistema de Perícias - Call of Cthulhu</h3>
+                <p><strong>Perícias Ocupacionais:</strong> EDU × 4 pontos (representa treinamento profissional)</p>
+                <p><strong>Perícias de Interesse Pessoal:</strong> INT × 2 pontos (hobbies e talentos naturais)</p>
+                <p>Distribua seus pontos com sabedoria - cada perícia tem um valor base que representa conhecimento comum.</p>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Perícias Ocupacionais</h2>
+                <div class="points-display">
+                    <div>📘 Pontos Ocupacionais: <span id="occupationalPoints">200</span></div>
+                    <div>💡 Pontos Usados: <span id="usedOccupationalPoints">0</span></div>
+                </div>
+                
+                <div class="skills-grid" id="occupationalSkillsGrid">
+                    <!-- Preenchido dinamicamente -->
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🌟 Perícias de Interesse Pessoal</h2>
+                <div class="points-display">
+                    <div>🎯 Pontos Pessoais: <span id="personalPoints">100</span></div>
+                    <div>⚡ Pontos Usados: <span id="usedPersonalPoints">0</span></div>
+                </div>
+                
+                <div class="skills-grid" id="personalSkillsGrid">
+                    <!-- Preenchido dinamicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Character Sheet Tab -->
+        <div id="sheet" class="tab-content">
+            <div class="character-sheet">
+                <h2>📜 Ficha do Investigador</h2>
+                
+                <div class="sheet-section">
+                    <h3>👤 Identificação</h3>
+                    <div class="sheet-header">
+                        <div class="sheet-image" id="sheetImage">
+                            <div class="no-image">👤</div>
+                        </div>
+                        <div class="sheet-info" id="sheetBasicInfo"></div>
+                    </div>
+                </div>
+                
+                <div class="sheet-section">
+                    <h3>🧬 Características Físicas Detalhadas</h3>
+                    <div id="sheetPhysicalCharacteristics"></div>
+                </div>
+                
+                <div class="sheet-section">
+                    <h3>📊 Atributos</h3>
+                    <div id="sheetAttributes"></div>
+                </div>
+
+                <div class="sheet-section">
+                    <h3>💫 Características Derivadas</h3>
+                    <div class="derived-stats">
+                        <div class="stat-item">
+                            <div class="stat-name">Pontos de Vida</div>
+                            <div class="stat-value" id="hitPoints">10</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-name">Sanidade Inicial</div>
+                            <div class="stat-value" id="sanity">50</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-name">Pontos de Magia</div>
+                            <div class="stat-value" id="magicPoints">10</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-name">Bônus de Dano</div>
+                            <div class="stat-value" id="damageBonus">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-name">Movimento</div>
+                            <div class="stat-value" id="movement">8</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-name">Esquiva</div>
+                            <div class="stat-value" id="dodge">25</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sheet-section">
+                    <h3>🎯 Perícias</h3>
+                    <div id="sheetSkills"></div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <button class="btn" onclick="exportCharacter()">💾 Exportar Ficha</button>
+                    <button class="btn btn-secondary" onclick="printCharacter()">🖨️ Imprimir</button>
+                    <button class="btn" onclick="showCharacterValidation()">✅ Validar</button>
+                    <button class="btn btn-danger" onclick="resetCharacter()">🔄 Resetar Tudo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Load main.js FIRST -->
+<script src="js/main.js"></script>
+
+<!-- Then load data files -->
+<script src="data/occupations.js"></script>
+<script src="data/skills.js"></script>
+<script src="data/character-data.js"></script>
+<script src="data/attributes.js"></script>
+
+<!-- Then load feature modules -->
+<script src="js/skills-management.js"></script>
+<script src="js/dice-rolling.js"></script>
+<script src="js/character-sheet.js"></script>
+   
+</body>
+</html>
