@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia do Investigador - Rolai</title>
+    <style>
+        /* CSS baseado no index.html com customizações para o guia */
+        :root {
+            --primary-color: #8B4513;
+            --primary-light: #CD853F;
+            --primary-dark: #5D2F04;
+            --secondary-color: #DEB887;
+            --accent-color: #228B22;
+            --warning-color: #DAA520;
+            --danger-color: #B22222;
+            --bg-dark: #1a1a1a;
+            --bg-medium: #2d2d2d;
+            --bg-light: #f8f5f0;
+            --bg-paper: #fefefe;
+            --text-dark: #2c2c2c;
+            --text-medium: #555555;
+            --text-light: #f8f5f0;
+            --text-muted: #888888;
+            --font-primary: 'Georgia', 'Times New Roman', serif;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 0.75rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: var(--bg-light);
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #2c1810, #3d2419);
+            color: var(--bg-light);
+            padding: 30px;
+            margin: -20px -20px 30px -20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .header h2 {
+            font-size: 1.3em;
+            opacity: 0.9;
+            font-weight: normal;
+        }
+
+        .back-navigation {
+            background: var(--bg-paper);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-bottom: 1px solid #eee;
+            box-shadow: var(--shadow-sm);
+            margin: -20px -20px 20px -20px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--primary-color);
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+            background: rgba(139, 69, 19, 0.1);
+            border-radius: 8px 8px 0 0;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            background: rgba(232, 224, 213, 0.8);
+            border: none;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            border-top: 2px solid var(--primary-color);
+            border-left: 1px solid var(--primary-color);
+            border-right: 1px solid var(--primary-color);
+            flex: 1;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .tab:first-child {
+            border-left: 2px solid var(--primary-color);
+            border-radius: 8px 0 0 0;
+        }
+
+        .tab:last-child {
+            border-right: 2px solid var(--primary-color);
+            border-radius: 0 8px 0 0;
+        }
+
+        .tab.active {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .tab:hover:not(.active) {
+            background: #d4c4b0;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+            padding: 20px;
+            background: rgba(248, 245, 240, 0.95);
+            border-radius: 0 0 8px 8px;
+            border: 2px solid var(--primary-color);
+            border-top: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h3 {
+            color: var(--primary-color);
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 15px;
+        }
+
+        h4 {
+            color: #2c1810;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+            text-indent: 20px;
+        }
+
+        .intro-box {
+            background: linear-gradient(135deg, #2c1810, #3d2419);
+            color: var(--bg-light);
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid var(--primary-light);
+            box-shadow: var(--shadow-md);
+        }
+
+        .intro-box p {
+            text-indent: 0;
+            margin-bottom: 12px;
+        }
+
+        .intro-box h3 {
+            color: var(--bg-light);
+            border-left: 4px solid var(--primary-light);
+        }
+
+        .example-box {
+            background: #f0f8f0;
+            border: 1px solid #90EE90;
+            border-left: 4px solid #228B22;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .example-box h5 {
+            color: #228B22;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .warning-box {
+            background: #fff8dc;
+            border: 1px solid var(--warning-color);
+            border-left: 4px solid #B8860B;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .warning-box h5 {
+            color: #B8860B;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        ul {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .characteristic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .characteristic-item {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .characteristic-item strong {
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .dice-example {
+            background: #2c1810;
+            color: var(--bg-light);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, var(--primary-light) 0%, #DEB887 100%);
+            color: #2c1810;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                border-radius: 0;
+                border-left: 2px solid var(--primary-color);
+                border-right: 2px solid var(--primary-color);
+            }
+            
+            .characteristic-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-navigation">
+            <a href="index.html" class="back-btn">← Voltar ao Início</a>
+        </div>
+
+        <div class="header">
+            <h1>Call of Cthulhu</h1>
+            <h2>Um Guia para Novos Investigadores</h2>
+            <p style="margin-top: 15px; text-indent: 0; font-style: italic;">Sobrevivendo ao Horror em um Mundo Quebrado</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('intro')">Introdução</button>
+            <button class="tab" onclick="showTab('sistema')">Como Jogar</button>
+            <button class="tab" onclick="showTab('sanidade')">Sanidade</button>
+            <button class="tab" onclick="showTab('investigacao')">Investigação</button>
+            <button class="tab" onclick="showTab('dicas')">Dicas</button>
+        </div>
+        
+        <div id="intro" class="tab-content active">
+            <div class="intro-box">
+                <h3>Bem-vindos ao Fim do Mundo</h3>
+                <p>Imaginem um mundo onde tudo que conhecíamos se despedaçou. O ano é 2053, e vocês são sobreviventes de uma guerra que quase extinguiu a humanidade. As cidades viraram cinzas, os rios se tornaram veneno, e o ar ainda carrega o gosto amargo da radiação.</p>
+                <p>Agora imaginem descobrir que a guerra não apenas destruiu o mundo físico... mas também revelou que nunca entendemos realmente a natureza da realidade.</p>
+            </div>
+            
+            <h3>O Que É Este Jogo?</h3>
+            <p><span class="highlight">Call of Cthulhu</span> não é como outros jogos de RPG que vocês podem conhecer. Não há dragões para matar, tesouros para encontrar, ou níveis para subir. Em vez disso, é um jogo sobre <strong>investigação</strong>, <strong>sobrevivência</strong> e <strong>descoberta</strong> - descobertas que talvez vocês prefiram nunca ter feito.</p>
+            
+            <p>Baseado nas obras do escritor H.P. Lovecraft, este é um jogo de <span class="highlight">horror cósmico</span> - um tipo especial de terror que vem da percepção de que o universo é muito maior, mais estranho e mais indiferente à humanidade do que jamais imaginamos.</p>
+            
+            <h4>O Que Isso Significa Na Prática?</h4>
+            <p>Em nosso cenário pós-apocalíptico, vocês interpretarão pessoas comuns tentando reconstruir a civilização em pequenos oásis de vida chamados <strong>Zonas de Regeneração</strong>. Vocês são cientistas, técnicos, ex-militares, ou simplesmente sobreviventes determinados a proteger esses últimos refúgios da humanidade.</p>
+            
+            <p>No início, os problemas parecem mundanos: animais desaparecendo, equipamentos falhando, comunicações cortadas. Talvez seja apenas um predador grande. Talvez bandidos. Talvez radiação causando mutações.</p>
+            
+            <div class="warning-box">
+                <h5>Mas conforme investigam mais fundo...</h5>
+                <p style="text-indent: 0;">Vocês descobrirão que algumas explicações não fazem sentido. Que alguns padrões são impossíveis. Que talvez - apenas talvez - existam coisas no mundo que a ciência não consegue explicar.</p>
+            </div>
+        </div>
+        
+        <div id="sistema" class="tab-content">
+            <h3>Como Funciona O Jogo?</h3>
+            
+            <h4>O Sistema de Dados</h4>
+            <p><span class="highlight">Call of Cthulhu</span> usa um sistema simples e elegante baseado em porcentagens. Cada habilidade do seu personagem tem um valor de 1 a 100. Para ter sucesso em uma ação, você rola um dado de 100 lados (ou dois dados de 10) e tenta tirar <strong>igual ou menor</strong> que sua habilidade.</p>
+            
+            <div class="example-box">
+                <h5>Exemplos Práticos:</h5>
+                <div class="dice-example">
+                    • Sua habilidade "Rastrear" é 65%. Você rola 43. ✅ Sucesso!<br>
+                    • Sua habilidade "Primeiros Socorros" é 45%. Você rola 67. ❌ Falha.<br>
+                    • Sua habilidade "Usar Computadores" é 80%. Você rola 15. ⭐ Sucesso Extremo!
+                </div>
+            </div>
+            
+            <h4>Níveis de Sucesso</h4>
+            <ul>
+                <li><strong>Sucesso Normal:</strong> Resultado igual ou menor que sua habilidade</li>
+                <li><strong>Sucesso Difícil:</strong> Resultado igual ou menor que metade da sua habilidade</li>
+                <li><strong>Sucesso Extremo:</strong> Resultado igual ou menor que 1/5 da sua habilidade</li>
+                <li><strong>Falha Crítica:</strong> Resultado de 96-100 (sempre falha)</li>
+            </ul>
+            
+            <h4>Características Básicas</h4>
+            <p>Seu personagem tem oito características fundamentais:</p>
+            
+            <div class="characteristic-grid">
+                <div class="characteristic-item">
+                    <strong>Força (STR)</strong>
+                    Poder físico e capacidade atlética
+                </div>
+                <div class="characteristic-item">
+                    <strong>Constituição (CON)</strong>
+                    Resistência e saúde geral
+                </div>
+                <div class="characteristic-item">
+                    <strong>Tamanho (SIZ)</strong>
+                    Altura e massa corporal
+                </div>
+                <div class="characteristic-item">
+                    <strong>Destreza (DEX)</strong>
+                    Agilidade e coordenação motora
+                </div>
+                <div class="characteristic-item">
+                    <strong>Aparência (APP)</strong>
+                    Carisma físico e presença
+                </div>
+                <div class="characteristic-item">
+                    <strong>Inteligência (INT)</strong>
+                    Raciocínio e capacidade de memória
+                </div>
+                <div class="characteristic-item">
+                    <strong>Poder (POW)</strong>
+                    Força de vontade e intuição
+                </div>
+                <div class="characteristic-item">
+                    <strong>Educação (EDU)</strong>
+                    Conhecimento formal adquirido
+                </div>
+            </div>
+            
+            <p>Dessas características derivam dezenas de <strong>Habilidades</strong> específicas como Biologia, Escalada, Persuasão, Usar Armas de Fogo, Primeiros Socorros, e muitas outras.</p>
+        </div>
+        
+        <div id="sanidade" class="tab-content">
+            <h3>A Diferença Crucial: Sanidade</h3>
+            
+            <p>Aqui está onde <span class="highlight">Call of Cthulhu</span> se torna único. Além dos Pontos de Vida tradicionais, seu personagem tem <strong>Pontos de Sanidade</strong> - sua estabilidade mental.</p>
+            
+            <p>Em um mundo pós-apocalíptico onde a realidade já foi abalada pela guerra, a mente humana é frágil. Quando vocês testemunham algo que desafia sua compreensão do mundo - seja uma descoberta científica perturbadora ou algo que simplesmente não deveria existir - vocês podem perder Sanidade.</p>
+            
+            <h4>Como Funciona a Sanidade?</h4>
+            <ul>
+                <li><strong>Sanidade Inicial:</strong> Igual ao seu POW (geralmente 50-80 pontos)</li>
+                <li><strong>Perdas Menores:</strong> 1-3 pontos por eventos perturbadores</li>
+                <li><strong>Perdas Maiores:</strong> 1d10 ou mais por revelações chocantes</li>
+                <li><strong>Loucura Temporária:</strong> Se perder 5+ pontos de uma vez</li>
+                <li><strong>Loucura Indefinida:</strong> Se perder 20+ pontos de uma vez, ou chegar a 0 Sanidade</li>
+            </ul>
+            
+            <div class="example-box">
+                <h5>Exemplo Prático de Teste de Sanidade:</h5>
+                <p style="text-indent: 0;">Vocês estão investigando o desaparecimento de animais na floresta. Encontram pegadas estranhas - maiores que qualquer animal conhecido. <strong>Teste de Sanidade (0/1d4):</strong></p>
+                <ul style="margin-left: 20px;">
+                    <li><strong>Se passarem:</strong> "Que estranho, mas deve ter explicação."</li>
+                    <li><strong>Se falharem:</strong> Perdem 1-4 pontos e começam a questionar o que realmente sabem sobre o mundo.</li>
+                </ul>
+            </div>
+            
+            <h4>O Horror Cósmico em Ação</h4>
+            <p>O verdadeiro horror em <span class="highlight">Call of Cthulhu</span> não vem de monstros que saltam do escuro. Vem da realização gradual de que o mundo não é o que vocês pensavam.</p>
+            
+            <div class="intro-box">
+                <h4>Imaginem descobrir que:</h4>
+                <ul style="color: var(--bg-light);">
+                    <li>As leis da física não são tão fixas quanto a ciência ensina</li>
+                    <li>Existem formas de vida que desafiam toda compreensão biológica</li>
+                    <li>A guerra pode ter liberado mais do que apenas radiação</li>
+                    <li>Algumas transmissões de rádio... talvez não venham de outros humanos</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="investigacao" class="tab-content">
+            <h3>Seu Papel Como Investigador</h3>
+            
+            <h4>Não São Heróis Tradicionais</h4>
+            <p>Seus personagens não são super-heróis ou guerreiros épicos. São pessoas normais em circunstâncias extraordinárias. Um biólogo tentando entender por que os animais estão agindo estranhamente. Um ex-militar protegendo uma comunidade vulnerável. Um técnico em eletrônica notando interferências impossíveis nos equipamentos.</p>
+            
+            <h4>A Investigação É Fundamental</h4>
+            <p><span class="highlight">Call of Cthulhu</span> é, no fundo, um jogo de mistério. Vocês coletam pistas, entrevistam testemunhas, analisam evidências e gradualmente montam um quebra-cabeças. A diferença é que a imagem final pode revelar algo que vocês prefeririam não saber.</p>
+            
+            <h4>Trabalho Em Equipe</h4>
+            <p>Nenhum investigador pode fazer tudo sozinho. Em nosso cenário:</p>
+            
+            <div class="characteristic-grid">
+                <div class="characteristic-item">
+                    <strong>O Médico</strong>
+                    Trata ferimentos e analisa amostras biológicas
+                </div>
+                <div class="characteristic-item">
+                    <strong>O Ex-Militar</strong>
+                    Conhece táticas e pode treinar a comunidade
+                </div>
+                <div class="characteristic-item">
+                    <strong>O Cientista</strong>
+                    Interpreta dados e forma teorias
+                </div>
+                <div class="characteristic-item">
+                    <strong>O Técnico</strong>
+                    Mantém equipamentos funcionando e improvisa soluções
+                </div>
+            </div>
+        </div>
+        
+        <div id="dicas" class="tab-content">
+            <h3>Dicas Para Novos Investigadores</h3>
+            
+            <div class="example-box">
+                <h5>1. Pensem Como Pessoas Reais</h5>
+                <p style="text-indent: 0;">Seus personagens têm motivações, medos e limitações humanas. Um biólogo não necessariamente sabe usar armas. Um soldado pode não entender equipamentos científicos complexos. Use essas limitações para criar interpretação interessante.</p>
+            </div>
+            
+            <div class="example-box">
+                <h5>2. A Cautela É Virtude</h5>
+                <p style="text-indent: 0;">Em <span class="highlight">Call of Cthulhu</span>, os corajosos morrem jovens. Não tenham medo de recuar, reagrupar, ou pedir ajuda. Sobrevivência é mais importante que heroísmo.</p>
+            </div>
+            
+            <div class="example-box">
+                <h5>3. Documentem Tudo</h5>
+                <p style="text-indent: 0;">Mantenham registros detalhados de suas descobertas. Padrões podem emergir ao longo do tempo. Informações aparentemente irrelevantes podem se tornar cruciais mais tarde.</p>
+            </div>
+            
+            <div class="example-box">
+                <h5>4. Confiem Uns nos Outros</h5>
+                <p style="text-indent: 0;">Em um mundo onde a realidade pode ser questionável, seus companheiros investigadores são suas âncoras. Quando um de vocês começa a duvidar da própria sanidade, os outros podem confirmar o que realmente aconteceu.</p>
+            </div>
+            
+            <div class="example-box">
+                <h5>5. Aceitem Que Nem Tudo Tem Solução</h5>
+                <p style="text-indent: 0;">Algumas vezes, o melhor que vocês podem fazer é conter uma ameaça, não eliminá-la. Algumas verdades são grandes demais para serem totalmente compreendidas. E está tudo bem.</p>
+            </div>
+            
+            <h3>Preparando-se Para Jogar</h3>
+            
+            <h4>Criação de Personagem</h4>
+            <p>Comecem pensando em quem seu personagem era antes da guerra (se eram velhos o suficiente para lembrar) e quem se tornaram depois. Como chegaram à comunidade? O que os motiva a protegê-la? Que habilidades trouxeram consigo?</p>
+            
+            <div class="warning-box">
+                <h5>Recursos Escassos:</h5>
+                <p style="text-indent: 0;">Lembrem-se: este é um mundo de recursos escassos. Cada bala conta. Cada pilha é preciosa. Combustível é um luxo. Planejiem cuidadosamente antes de sair em expedições.</p>
+            </div>
+            
+            <div class="intro-box">
+                <p>O verdadeiro horror em <span class="highlight">Call of Cthulhu</span> não está nos monstros - está na revelação de que o universo é vasto, indiferente e cheio de coisas que a mente humana não foi feita para compreender. Em um mundo já quebrado pela guerra, descobrir que a realidade em si é mais frágil do que imaginávamos pode ser a verdade mais aterrorizante de todas.</p>
+                
+                <p>Mas há beleza nisso também. Porque enfrentar o impossível, proteger o que importa, e manter a humanidade viva mesmo diante do horror cósmico... isso é o que nos torna verdadeiramente humanos.</p>
+                
+                <p style="text-align: center; font-size: 1.1em; margin-top: 20px;"><strong>Seus personagens podem não ser heróis no sentido tradicional. Mas ao investigar o desconhecido, proteger os inocentes e preservar a esperança em um mundo sombrio, vocês se tornarão algo ainda mais importante: guardiões da luz humana contra a escuridão infinita.</strong></p>
+            </div>
+            
+            <div class="warning-box" style="text-align: center; margin-top: 30px;">
+                <h5 style="font-size: 1.2em;">Preparados Para Começar?</h5>
+                <p style="text-indent: 0; font-style: italic;">Agora peguem seus dados, preparem suas lanternas, e venham conosco investigar o que se esconde nas sombras do Pico das Agulhas Negras. O mundo precisa de investigadores corajosos o suficiente para enfrentar a verdade... seja ela qual for.</p>
+                <p style="text-indent: 0; margin-top: 15px;">
+                    <a href="generator.html" style="display: inline-block; background: var(--primary-color); color: var(--text-light); padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">🎲 Criar Seu Investigador</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
