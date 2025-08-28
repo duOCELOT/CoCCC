@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPCs - Estação Agulhas Negras</title>
+    <link rel="stylesheet" href="css/npcs-style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <h1>🏔️ Estação Agulhas Negras</h1>
+            <h2>NPCs - Call of Cthulhu 2053</h2>
+            <div class="header-stats">
+                <span class="stat-badge">👥 23 Sobreviventes</span>
+                <span class="stat-badge">📅 Ano 2053</span>
+                <span class="stat-badge">🌍 Pós-Apocalipse</span>
+                <span class="stat-badge">📷 Fotos Personalizáveis</span>
+                <span class="stat-badge" id="system-status">🔄 Carregando...</span>
+            </div>
+            <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
+                💡 <strong>Dica:</strong> Clique em qualquer NPC para ver detalhes completos e adicionar/alterar fotos personalizadas!
+            </p>
+            <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.8rem;">
+                ⌨️ <strong>Atalhos:</strong> Ctrl+G (NPC aleatório) • Ctrl+R (Relatório) • Ctrl+I (Imagens) • Ctrl+F (Buscar)
+            </p>
+        </header>
+
+        <nav class="category-nav">
+            <button class="nav-btn active" data-category="all">Todos</button>
+            <button class="nav-btn" data-category="cientificos">🔬 Científicos (5)</button>
+            <button class="nav-btn" data-category="suporte">🔧 Suporte (8)</button>
+            <button class="nav-btn" data-category="seguranca">🛡️ Segurança (4)</button>
+            <button class="nav-btn" data-category="dependentes">👥 Dependentes (6)</button>
+        </nav>
+
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="🔍 Buscar NPCs por nome, profissão, habilidade, biografia...">
+        </div>
+
+        <div class="npcs-grid" id="npcs-container">
+            <!-- NPCs will be dynamically loaded here -->
+        </div>
+
+        <div class="modal" id="npc-modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modal-body">
+                    <!-- Modal content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================== -->
+    <!-- DATA LOADING - Try new system first, fallback to old system -->
+    <!-- ================================================================== -->
+    
+    <!-- NEW MODULAR SYSTEM (Priority) -->
+    <script src="data/scientists-data.js" onerror="console.warn('⚠️ Scientists data not found, using fallback')"></script>
+    <script src="data/support-data.js" onerror="console.warn('⚠️ Support data not found, using fallback')"></script>
+    <script src="data/security-data.js" onerror="console.warn('⚠️ Security data not found, using fallback')"></script>
+    <script src="data/dependents-data.js" onerror="console.warn('⚠️ Dependents data not found, using fallback')"></script>
+    <script src="data/relationships-data.js" onerror="console.warn('⚠️ Relationships data not found, using fallback')"></script>
+    <script src="data/adventure-data.js" onerror="console.warn('⚠️ Adventure data not found, using fallback')"></script>
+    <script src="data/main-data-loader.js" onerror="console.warn('⚠️ Main data loader not found, using basic system')"></script>
+    
+    <!-- OLD SYSTEM (Fallback) -->
+    <script src="data/npcs-data.js" onerror="console.warn('⚠️ Legacy NPCs data not found')"></script>
+    
+    <!-- ================================================================== -->
+    <!-- CORE SYSTEMS -->
+    <!-- ================================================================== -->
+    
+    <!-- Image Manager (Optional) -->
+    <script src="js/npc-image-manager.js" onerror="console.warn('⚠️ Image manager not found, using placeholders')"></script>
+    
+    <!-- Main NPC Manager (Updated) -->
+    <script src="js/npcs-script-updated.js"></script>
+
+    <!-- ================================================================== -->
+    <!-- INITIALIZATION & STATUS UPDATE -->
+    <!-- ================================================================== -->
+    
+    <script>
+        // Update system status badge based on what's loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const statusBadge = document.getElementById('system-status');
+                
+                if (window.ESTACAO_API) {
+                    statusBadge.innerHTML = '🚀 Sistema Avançado';
+                    statusBadge.style.background = '#4caf50';
+                } else if (window.SCIENTISTS_DATA && window.SUPPORT_DATA) {
+                    statusBadge.innerHTML = '✅ Sistema Modular';
+                    statusBadge.style.background = '#2196f3';
+                } else if (window.NPCS_DATA) {
+                    statusBadge.innerHTML = '⚙️ Sistema Clássico';
+                    statusBadge.style.background = '#ff9800';
+                } else {
+                    statusBadge.innerHTML = '❌ Erro de Dados';
+                    statusBadge.style.background = '#f44336';
+                }
+            }, 500);
+        });
+
+        // Global error handler for missing scripts
+        window.addEventListener('error', (e) => {
+            if (e.target.tagName === 'SCRIPT') {
+                console.warn(`⚠️ Script não encontrado: ${e.target.src}`);
+            }
+        });
+
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+            console.log(`⚡ Página carregada em ${loadTime}ms`);
+        });
+    </script>
+
+    <!-- ================================================================== -->
+    <!-- DEVELOPMENT HELPERS (Remove in production) -->
+    <!-- ================================================================== -->
+    
+    <script>
+        // Development mode detection
+        const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        if (isDevelopment) {
+            // Add development helpers
+            console.log('🔧 Modo de desenvolvimento detectado');
+            
+            // Quick access functions
+            window.dev = {
+                reloadData: () => window.location.reload(),
+                showAllNPCs: () => console.table(window.npcManager?.allNPCs || []),
+                testSearch: (term) => {
+                    document.getElementById('search-input').value = term;
+                    document.getElementById('search-input').dispatchEvent(new Event('input'));
+                },
+                openRandomNPC: () => {
+                    if (window.npcManager) {
+                        window.npcManager.showRandomNPC();
+                    }
+                }
+            };
+            
+            console.log('🛠️ Funções de desenvolvimento disponíveis em window.dev');
+        }
+    </script>
+
+</body>
+</html>

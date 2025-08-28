@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursos Adicionais - Rolai</title>
+    <style>
+        :root {
+            --primary-color: #8B4513;
+            --primary-light: #CD853F;
+            --primary-dark: #5D2F04;
+            --secondary-color: #DEB887;
+            --accent-color: #228B22;
+            --warning-color: #DAA520;
+            --danger-color: #B22222;
+            --bg-dark: #1a1a1a;
+            --bg-medium: #2d2d2d;
+            --bg-light: #f8f5f0;
+            --bg-paper: #fefefe;
+            --text-dark: #2c2c2c;
+            --text-medium: #555555;
+            --text-light: #f8f5f0;
+            --text-muted: #888888;
+            --font-primary: 'Georgia', 'Times New Roman', serif;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 0.75rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --transition-normal: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: var(--bg-light);
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .back-navigation {
+            background: var(--bg-paper);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-bottom: 1px solid #eee;
+            box-shadow: var(--shadow-sm);
+            margin: -20px -20px 20px -20px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition-normal);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--primary-color);
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            color: var(--text-light);
+            padding: var(--spacing-2xl);
+            margin: -20px -20px var(--spacing-xl) -20px;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-md);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--spacing-xl);
+            margin: var(--spacing-2xl) 0;
+        }
+
+        .resource-card {
+            background: var(--bg-paper);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            border: 1px solid #ddd;
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .resource-card h3 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .resource-card .icon {
+            font-size: 2rem;
+        }
+
+        .table-container {
+            background: var(--bg-paper);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+            overflow-x: auto;
+            box-shadow: var(--shadow-sm);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+        }
+
+        th, td {
+            padding: var(--spacing-sm) var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: var(--primary-color);
+            color: var(--text-light);
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .quick-ref {
+            background: linear-gradient(135deg, #f0f8ff, #e6f3ff);
+            border: 1px solid var(--accent-color);
+            border-left: 4px solid var(--accent-color);
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border-radius: var(--radius-md);
+        }
+
+        .quick-ref h4 {
+            color: var(--accent-color);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .dice-roller {
+            background: var(--primary-dark);
+            color: var(--text-light);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            margin: var(--spacing-lg) 0;
+            text-align: center;
+        }
+
+        .dice-result {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: var(--spacing-md) 0;
+            padding: var(--spacing-md);
+            background: rgba(255,255,255,0.1);
+            border-radius: var(--radius-md);
+        }
+
+        button {
+            background: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background var(--transition-normal);
+        }
+
+        button:hover {
+            background: var(--primary-light);
+        }
+
+        .npc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .npc-card {
+            background: var(--bg-light);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            border: 1px solid #ddd;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .npc-card h5 {
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .npc-card .npc-role {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--spacing-md);
+            }
+            
+            .resources-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+            
+            .resource-card {
+                padding: var(--spacing-md);
+            }
+            
+            .npc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-navigation">
+            <a href="index.html" class="back-btn">← Voltar ao Início</a>
+        </div>
+
+        <div class="header">
+            <h1>📚 Recursos Adicionais</h1>
+            <p>Materiais de apoio, tabelas de referência e ferramentas para suas sessões de Call of Cthulhu</p>
+        </div>
+
+        <div class="resources-grid">
+            <div class="resource-card">
+                <h3><span class="icon">🎲</span> Rolador de Dados</h3>
+                <p>Ferramenta para rolar dados durante suas sessões de Call of Cthulhu</p>
+                
+                <div class="dice-roller">
+                    <h4>Rolador de d100</h4>
+                    <div class="dice-result" id="diceResult">--</div>
+                    <button onclick="rollD100()">🎲 Rolar d100</button>
+                    <button onclick="rollD20()">🎲 Rolar d20</button>
+                    <button onclick="rollD10()">🎲 Rolar d10</button>
+                    <button onclick="rollD6()">🎲 Rolar d6</button>
+                </div>
+            </div>
+
+            <div class="resource-card">
+                <h3><span class="icon">📊</span> Tabelas de Referência</h3>
+                <p>Tabelas úteis para consulta rápida durante o jogo</p>
+                
+                <div class="quick-ref">
+                    <h4>🎯 Níveis de Dificuldade</h4>
+                    <ul>
+                        <li><strong>Normal:</strong> Habilidade completa</li>
+                        <li><strong>Difícil:</strong> Metade da habilidade</li>
+                        <li><strong>Extremo:</strong> 1/5 da habilidade</li>
+                    </ul>
+                </div>
+
+                <div class="quick-ref">
+                    <h4>🧠 Perda de Sanidade Comum</h4>
+                    <ul>
+                        <li><strong>Corpo mutilado:</strong> 0/1d4</li>
+                        <li><strong>Morte violenta:</strong> 1/1d6</li>
+                        <li><strong>Criatura anômala:</strong> 1d4/1d8</li>
+                        <li><strong>Horror cósmico:</strong> 1d8/1d20</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="resource-card">
+                <h3><span class="icon">👥</span> NPCs Prontos</h3>
+                <p>Lista completa dos 23 sobreviventes da Estação Agulhas Negras</p>
+                
+                <div class="npc-grid">
+                    <div class="npc-card">
+                        <h5>Dra. Mariana Costa</h5>
+                        <div class="npc-role">Líder da Estação, 42 anos</div>
+                        <p>Bióloga determinada, carrega peso da liderança</p>
+                    </div>
+                    
+                    <div class="npc-card">
+                        <h5>Capitão Roberto Silva</h5>
+                        <div class="npc-role">Chefe de Segurança, 54 anos</div>
+                        <p>Ex-militar disciplinado, protetor paternal</p>
+                    </div>
+                    
+                    <div class="npc-card">
+                        <h5>José Kalapalo</h5>
+                        <div class="npc-role">Guia Local, 70 anos</div>
+                        <p>Conhece a floresta, descendente indígena</p>
+                    </div>
+                    
+                    <div class="npc-card">
+                        <h5>Ana Silva</h5>
+                        <div class="npc-role">Atiradora, 16 anos</div>
+                        <p>Filha do capitão, madura além da idade</p>
+                    </div>
+                    
+                    <div class="npc-card">
+                        <h5>Dr. Paulo Santos</h5>
+                        <div class="npc-role">Médico, 38 anos</div>
+                        <p>Calmo sob pressão, cético mas protetor</p>
+                    </div>
+                    
+                    <div class="npc-card">
+                        <h5>Elena Vasquez</h5>
+                        <div class="npc-role">Engenheira, 29 anos</div>
+                        <p>Genial com tecnologia, socialmente tímida</p>
+                    </div>
+                </div>
+                
+                <p style="text-align: center; margin-top: var(--spacing-md);">
+                    <em>+ 17 outros sobreviventes detalhados no cenário</em>
+                </p>
+            </div>
+
+            <div class="resource-card">
+                <h3><span class="icon">🗺️</span> Ganchos de Aventura</h3>
+                <p>Ideias para expandir a campanha além das Agulhas Negras</p>
+                
+                <div class="quick-ref">
+                    <h4>📻 Transmissões Misteriosas</h4>
+                    <p>Zona Pantanal para de responder. Última mensagem menciona "peixes voando" e "olhos nas águas".</p>
+                </div>
+                
+                <div class="quick-ref">
+                    <h4>🚛 A Caravana Perdida</h4>
+                    <p>Expedição de suprimentos desaparece entre zonas. Apenas veículos abandonados e marcas estranhas no solo.</p>
+                </div>
+                
+                <div class="quick-ref">
+                    <h4>📡 Frequência Morta</h4>
+                    <p>Rádios captam vozes em idiomas inexistentes. Alguns moradores relatam "ouvir chamados" durante a noite.</p>
+                </div>
+                
+                <div class="quick-ref">
+                    <h4>🏛️ O Arquivo Perdido</h4>
+                    <p>Bunker militar pré-guerra contém documentos sobre "Projeto Barreira" - evidências de contenção de entidades.</p>
+                </div>
+            </div>
+
+            <div class="resource-card">
+                <h3><span class="icon">💡</span> Dicas de Mestre</h3>
+                <p>Conselhos para conduzir sessões de Call of Cthulhu no mundo pós-apocalíptico</p>
+                
+                <div class="quick-ref">
+                    <h4>🎭 Atmosfera</h4>
+                    <ul>
+                        <li>Enfatize o contraste: esperança vs. horror</li>
+                        <li>Use silêncios e pausas dramaticamente</li>
+                        <li>Descreva o mundano antes do sobrenatural</li>
+                        <li>Faça cada vida salva ter valor emocional</li>
+                    </ul>
+                </div>
+                
+                <div class="quick-ref">
+                    <h4>⚖️ Recursos Escassos</h4>
+                    <ul>
+                        <li>Munição é preciosa - cada bala conta</li>
+                        <li>Combustível limita explorações</li>
+                        <li>Comida racionada cria tensão social</li>
+                        <li>Medicamentos raros tornam ferimentos sérios</li>
+                    </ul>
+                </div>
+                
+                <div class="quick-ref">
+                    <h4>🔍 Investigação</h4>
+                    <ul>
+                        <li>Pistas devem ter múltiplas interpretações</li>
+                        <li>Permita soluções criativas dos jogadores</li>
+                        <li>Use conhecimento científico dos NPCs</li>
+                        <li>Conecte descobertas às consequências humanas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="resource-card">
+                <h3><span class="icon">📋</span> Tabelas Úteis</h3>
+                <p>Referências rápidas para situações comuns</p>
+                
+                <div class="table-container">
+                    <h4>🌡️ Efeitos do Clima Pós-Guerra</h4>
+                    <table>
+                        <tr><th>Condição</th><th>Efeito</th><th>Duração</th></tr>
+                        <tr><td>Chuva Ácida</td><td>1 dano/hora exposto</td><td>1d6 horas</td></tr>
+                        <tr><td>Tempestade Radioativa</td><td>CON vs veneno</td><td>2d6 horas</td></tr>
+                        <tr><td>Neblina Tóxica</td><td>-2 Observar</td><td>1d12 horas</td></tr>
+                        <tr><td>Frio Anômalo</td><td>CON vs hipotermia</td><td>1 noite</td></tr>
+                    </table>
+                </div>
+                
+                <div class="table-container">
+                    <h4>🔋 Estado de Equipamentos</h4>
+                    <table>
+                        <tr><th>Item</th><th>Condição</th><th>Disponibilidade</th></tr>
+                        <tr><td>Rádio</td><td>Funcional</td><td>1 por zona</td></tr>
+                        <tr><td>Gerador Solar</td><td>Limitado</td><td>Energia durante o dia</td></tr>
+                        <tr><td>Veículos</td><td>Combustível escasso</td><td>Apenas emergências</td></tr>
+                        <tr><td>Armamento</td><td>Munição limitada</td><td>Estritamente racionada</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: var(--spacing-2xl) 0;">
+            <h2>🚀 Continue Sua Jornada</h2>
+            <p style="margin-bottom: var(--spacing-lg);">Explore todos os recursos disponíveis para sua campanha de Call of Cthulhu</p>
+            
+            <div style="display: flex; gap: var(--spacing-md); justify-content: center; flex-wrap: wrap;">
+                <a href="guide.html" style="display: inline-block; background: var(--accent-color); color: var(--text-light); padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+                    📖 Ler o Guia
+                </a>
+                <a href="scenario.html" style="display: inline-block; background: var(--warning-color); color: var(--text-dark); padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+                    🏔️ Explorar Cenário
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para rolar dados
+        function rollDice(sides) {
+            return Math.floor(Math.random() * sides) + 1;
+        }
+
+        function rollD100() {
+            const result = rollDice(100);
+            document.getElementById('diceResult').textContent = result;
+            
+            // Adiciona interpretação do resultado
+            let interpretation = '';
+            if (result <= 5) interpretation = ' (Sucesso Extremo!)';
+            else if (result <= 20) interpretation = ' (Sucesso Difícil)';
+            else if (result <= 50) interpretation = ' (Sucesso Normal)';
+            else if (result >= 96) interpretation = ' (Falha Crítica!)';
+            else interpretation = ' (Falha)';
+            
+            document.getElementById('diceResult').innerHTML = result + '<br><small style="font-size: 0.7em;">' + interpretation + '</small>';
+        }
+
+        function rollD20() {
+            const result = rollDice(20);
+            document.getElementById('diceResult').textContent = result;
+        }
+
+        function rollD10() {
+            const result = rollDice(10);
+            document.getElementById('diceResult').textContent = result;
+        }
+
+        function rollD6() {
+            const result = rollDice(6);
+            document.getElementById('diceResult').textContent = result;
+        }
+
+        // Animações quando a página carrega
+        document.addEventListener('DOMContentLoaded', function() {
+            // Intersection Observer para animações
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            // Observa cards para animação
+            const cards = document.querySelectorAll('.resource-card, .npc-card, .table-container');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+
+            // Animação especial para o rolador de dados
+            const diceRoller = document.querySelector('.dice-roller');
+            if (diceRoller) {
+                diceRoller.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.02)';
+                });
+                
+                diceRoller.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            }
+        });
+
+        // Efeito de hover nas tabelas
+        document.querySelectorAll('table tr').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.background = '#f0f8ff';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                if (!this.querySelector('th')) {
+                    this.style.background = '';
+                }
+            });
+        });
+
+        // Função para copiar texto (útil para NPCs e recursos)
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Feedback visual opcional
+                console.log('Texto copiado: ' + text);
+            });
+        }
+
+        // Adiciona funcionalidade de cópia aos cards de NPC
+        document.querySelectorAll('.npc-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const name = this.querySelector('h5').textContent;
+                const role = this.querySelector('.npc-role').textContent;
+                const description = this.querySelector('p').textContent;
+                
+                const npcText = `${name} - ${role}\n${description}`;
+                copyToClipboard(npcText);
+                
+                // Feedback visual
+                this.style.background = '#e8f5e8';
+                setTimeout(() => {
+                    this.style.background = '';
+                }, 1000);
+            });
+        });
+
+        // Sistema de favoritos para recursos
+        let favorites = JSON.parse(localStorage.getItem('rolai_favorites') || '[]');
+
+        function toggleFavorite(resourceId) {
+            const index = favorites.indexOf(resourceId);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(resourceId);
+            }
+            localStorage.setItem('rolai_favorites', JSON.stringify(favorites));
+            updateFavoriteButtons();
+        }
+
+        function updateFavoriteButtons() {
+            // Pega as cores das variáveis CSS
+            const accentColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--accent-color').trim();
+            const primaryColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--primary-color').trim();
+                
+            document.querySelectorAll('[data-resource-id]').forEach(button => {
+                const resourceId = button.dataset.resourceId;
+                if (favorites.includes(resourceId)) {
+                    button.textContent = '⭐ Favoritado';
+                    button.style.background = accentColor;
+                } else {
+                    button.textContent = '☆ Favoritar';
+                    button.style.background = primaryColor;
+                }
+            });
+        }
+
+        // Inicializa sistema de favoritos quando página carrega
+        document.addEventListener('DOMContentLoaded', function() {
+            updateFavoriteButtons();
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursos Adicionais - Rolai</title>
+    <style>
+        :root {
+            --primary-color: #8B4513;
+            --primary-light: #CD853F;
+            --primary-dark: #5D2F04;
+            --secondary-color: #DEB887;
+            --accent-color: #228B22;
+            --warning-color: #DAA520;
+            --danger-color: #B22222;
+            --bg-dark: #1a1a1a;
+            --bg-medium: #2d2d2d;
+            --bg-light: #f8f5f0;
+            --bg-paper: #fefefe;
+            --text-dark: #2c2c2c;
+            --text-medium: #555555;
+            --text-light: #f8f5f0;
+            --text-muted: #888888;
+            --font-primary: 'Georgia', 'Times New Roman', serif;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 0.75rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --transition-normal: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: var(--bg-light);
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .back-navigation {
+            background: var(--bg-paper);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-bottom: 1px solid #eee;
+            box-shadow: var(--shadow-sm);
+            margin: -20px -20px 20px -20px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition-normal);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--primary-color);
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            color: var(--text-light);
+            padding: var(--spacing-2xl);
+            margin: -20px -20px var(--spacing-xl) -20px;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-md);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--spacing-xl);
+            margin: var(--spacing-2xl) 0;
+        }
+
+        .resource-card {
+            background: var(--bg-paper);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            border: 1px solid #ddd;
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .resource-card h3 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .resource-card .icon {
+            font-size: 2rem;
+        }
+
+        .table-container {
+            background: var(--bg-paper);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+            overflow-x: auto;
+            box-shadow: var(--shadow-sm); }</style>
